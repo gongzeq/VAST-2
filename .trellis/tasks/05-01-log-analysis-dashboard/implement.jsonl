@@ -1,0 +1,5 @@
+{"_example": "Fill with {\"file\": \"<path>\", \"reason\": \"<why>\"}. Put spec/research files only — no code paths. Run `python3 .trellis/scripts/get_context.py --mode packages` to list available specs. Delete this line once real entries are added."}
+{"file": ".trellis/spec/backend/logging-guidelines.md", "reason": "Backend logging and sensitive-log handling conventions relevant to raw security log ingestion"}
+{"file": ".trellis/spec/backend/index.md", "reason": "Backend spec index for log receiver, parser, aggregation, audit, and data model implementation context"}
+{"file": ".trellis/spec/guides/cross-layer-thinking-guide.md", "reason": "Cross-layer data flow guidance for log ingestion, aggregation API, and dashboard display"}
+{"file": ".trellis/spec/frontend/index.md", "reason": "Frontend spec index for dashboard metric presentation context"}
