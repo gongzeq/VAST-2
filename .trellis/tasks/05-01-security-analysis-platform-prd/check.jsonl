@@ -1,0 +1,15 @@
+{"file": ".trellis/spec/backend/index.md", "reason": "Backend guideline index for verifying API, persistence, orchestration, executor, audit, and logging work."}
+{"file": ".trellis/spec/backend/directory-structure.md", "reason": "Verify backend files follow the expected module layout."}
+{"file": ".trellis/spec/backend/database-guidelines.md", "reason": "Verify migrations and persistence models for tasks, assets, audit logs, results, and configs."}
+{"file": ".trellis/spec/backend/error-handling.md", "reason": "Verify validation, authorization, executor, and workflow errors are handled consistently."}
+{"file": ".trellis/spec/backend/logging-guidelines.md", "reason": "Verify audit logging and log ingestion follow the project guidance."}
+{"file": ".trellis/spec/backend/quality-guidelines.md", "reason": "Verify backend quality and security-sensitive implementation standards."}
+{"file": ".trellis/spec/frontend/index.md", "reason": "Frontend guideline index for verifying the analyst UI and dashboard."}
+{"file": ".trellis/spec/frontend/directory-structure.md", "reason": "Verify frontend files follow the expected layout."}
+{"file": ".trellis/spec/frontend/component-guidelines.md", "reason": "Verify UI components are composed according to project guidance."}
+{"file": ".trellis/spec/frontend/hook-guidelines.md", "reason": "Verify frontend data access and hooks are consistent."}
+{"file": ".trellis/spec/frontend/state-management.md", "reason": "Verify UI state for tasks, assets, dashboards, and settings is managed consistently."}
+{"file": ".trellis/spec/frontend/type-safety.md", "reason": "Verify shared API models and UI data use type-safe contracts."}
+{"file": ".trellis/spec/frontend/quality-guidelines.md", "reason": "Verify frontend quality standards for the security operations interface."}
+{"file": ".trellis/spec/guides/cross-layer-thinking-guide.md", "reason": "Verify data flow remains consistent across database, API, orchestration, and UI layers."}
+{"file": ".trellis/spec/guides/code-reuse-thinking-guide.md", "reason": "Verify shared constants, schemas, permissions, and workflow definitions are reused rather than duplicated."}

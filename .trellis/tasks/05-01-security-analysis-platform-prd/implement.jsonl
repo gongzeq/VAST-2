@@ -1,0 +1,15 @@
+{"file": ".trellis/spec/backend/index.md", "reason": "Backend guideline index for service, API, persistence, executor, audit, and orchestration work."}
+{"file": ".trellis/spec/backend/directory-structure.md", "reason": "Backend project layout conventions for the new application skeleton."}
+{"file": ".trellis/spec/backend/database-guidelines.md", "reason": "Database and migration guidance for assets, tasks, audit logs, results, and configuration data."}
+{"file": ".trellis/spec/backend/error-handling.md", "reason": "Error handling conventions for validation, authorization, workflow, and executor failures."}
+{"file": ".trellis/spec/backend/logging-guidelines.md", "reason": "Structured logging and security log ingestion guidance relevant to audit and log analysis requirements."}
+{"file": ".trellis/spec/backend/quality-guidelines.md", "reason": "Backend quality constraints for implementing security-sensitive workflows."}
+{"file": ".trellis/spec/frontend/index.md", "reason": "Frontend guideline index for the security analyst UI and dashboard work."}
+{"file": ".trellis/spec/frontend/directory-structure.md", "reason": "Frontend project layout conventions for the new application skeleton."}
+{"file": ".trellis/spec/frontend/component-guidelines.md", "reason": "Component composition guidance for task, asset, audit, and dashboard screens."}
+{"file": ".trellis/spec/frontend/hook-guidelines.md", "reason": "Hook and data-fetching guidance for UI state connected to backend APIs."}
+{"file": ".trellis/spec/frontend/state-management.md", "reason": "State management guidance for task workflow, dashboards, and configuration screens."}
+{"file": ".trellis/spec/frontend/type-safety.md", "reason": "Frontend type safety guidance for shared API models and validation."}
+{"file": ".trellis/spec/frontend/quality-guidelines.md", "reason": "Frontend quality constraints for a security operations interface."}
+{"file": ".trellis/spec/guides/cross-layer-thinking-guide.md", "reason": "This PRD spans database, API, orchestration, and UI layers and needs cross-layer consistency."}
+{"file": ".trellis/spec/guides/code-reuse-thinking-guide.md", "reason": "The implementation will introduce shared constants, schemas, permissions, and workflow definitions."}
