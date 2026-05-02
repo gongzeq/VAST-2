@@ -6,7 +6,7 @@
 
 ## Overview
 
-This directory contains guidelines for frontend development. Fill in each file with your project's specific conventions.
+This directory contains frontend code-spec documents for the security analysis platform UI. These files define executable conventions for feature structure, task/confirmation flows, masking, state handling, type safety, and UI quality gates.
 
 ---
 
@@ -14,23 +14,23 @@ This directory contains guidelines for frontend development. Fill in each file w
 
 | Guide | Description | Status |
 |-------|-------------|--------|
-| [Directory Structure](./directory-structure.md) | Module organization and file layout | To fill |
-| [Component Guidelines](./component-guidelines.md) | Component patterns, props, composition | To fill |
-| [Hook Guidelines](./hook-guidelines.md) | Custom hooks, data fetching patterns | To fill |
-| [State Management](./state-management.md) | Local state, global state, server state | To fill |
-| [Quality Guidelines](./quality-guidelines.md) | Code standards, forbidden patterns | To fill |
-| [Type Safety](./type-safety.md) | Type patterns, validation | To fill |
+| [Directory Structure](./directory-structure.md) | Feature-first organization for analyst console, dashboard, audit, and admin surfaces | Complete |
+| [Component Guidelines](./component-guidelines.md) | Domain-aware components for stateful workflows, masking, and confirmation UI | Complete |
+| [Hook Guidelines](./hook-guidelines.md) | Query, mutation, polling, permission, and expiry-window hook conventions | Complete |
+| [State Management](./state-management.md) | Separation rules for local, global, server, URL, and sensitive temporary state | Complete |
+| [Quality Guidelines](./quality-guidelines.md) | UI-specific forbidden/required patterns, tests, and review checklist | Complete |
+| [Type Safety](./type-safety.md) | Shared contract, runtime validation, and sensitive-data typing rules | Complete |
 
 ---
 
-## How to Fill These Guidelines
+## How to Use These Guidelines
 
 For each guideline file:
 
-1. Document your project's **actual conventions** (not ideals)
-2. Include **code examples** from your codebase
-3. List **forbidden patterns** and why
-4. Add **common mistakes** your team has made
+1. Keep contracts aligned with backend enum names, permission points, and visibility rules
+2. Make workflow state and masking behavior explicit in the UI
+3. Extend the relevant feature spec when a new surface introduces confirmation, export, or sensitive-display behavior
+4. Treat these documents as implementation contracts, not optional style notes
 
 The goal is to help AI assistants and new team members understand how YOUR project works.
 

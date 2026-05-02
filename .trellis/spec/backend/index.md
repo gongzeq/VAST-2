@@ -6,7 +6,7 @@
 
 ## Overview
 
-This directory contains guidelines for backend development. Fill in each file with your project's specific conventions.
+This directory contains backend code-spec documents for the security analysis platform. These files define executable contracts for domain boundaries, persistence, error handling, logging/redaction, and quality requirements.
 
 ---
 
@@ -14,22 +14,22 @@ This directory contains guidelines for backend development. Fill in each file wi
 
 | Guide | Description | Status |
 |-------|-------------|--------|
-| [Directory Structure](./directory-structure.md) | Module organization and file layout | To fill |
-| [Database Guidelines](./database-guidelines.md) | ORM patterns, queries, migrations | To fill |
-| [Error Handling](./error-handling.md) | Error types, handling strategies | To fill |
-| [Quality Guidelines](./quality-guidelines.md) | Code standards, forbidden patterns | To fill |
-| [Logging Guidelines](./logging-guidelines.md) | Structured logging, log levels, security log ingestion contracts | Partial |
+| [Directory Structure](./directory-structure.md) | Domain-first module boundaries for auth, scope, orchestration, tooling, logs, reports, dashboard, and audit | Complete |
+| [Database Guidelines](./database-guidelines.md) | Persistence contracts for task state, asset state, retention, exports, and audit storage | Complete |
+| [Error Handling](./error-handling.md) | Typed domain error model, state transitions, retry rules, and API-safe failures | Complete |
+| [Quality Guidelines](./quality-guidelines.md) | Security-sensitive forbidden/required patterns, test minima, and review checklist | Complete |
+| [Logging Guidelines](./logging-guidelines.md) | Application/audit logging plus log-ingestion contracts with mandatory redaction and raw-body discard rules | Complete |
 
 ---
 
-## How to Fill These Guidelines
+## How to Use These Guidelines
 
 For each guideline file:
 
-1. Document your project's **actual conventions** (not ideals)
-2. Include **code examples** from your codebase
-3. List **forbidden patterns** and why
-4. Add **common mistakes** your team has made
+1. Start from the owning business domain, not the framework layer
+2. Reuse the exact enums, field names, and policy boundaries recorded here
+3. Extend the contracts when the PRD introduces new surface area
+4. Update the relevant file whenever a design decision changes runtime behavior or security boundaries
 
 The goal is to help AI assistants and new team members understand how YOUR project works.
 
