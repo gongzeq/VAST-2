@@ -39,6 +39,91 @@ Prefer explicit contracts and stable enums over clever abstractions. When behavi
 
 ---
 
+## Scenario: Controlled Tool Execution and Scan Workflows
+
+### 1. Scope / Trigger
+
+- Trigger: implementing tool execution, asset discovery, service discovery, vulnerability scanning, or weak-password scanning workflows.
+- These flows are security-sensitive because they translate structured task plans into auxiliary tool invocations and must not bypass asset scope, confirmation, timeout, cancellation, audit, or partial-success rules.
+
+### 2. Signatures
+
+Minimum backend contracts:
+
+- `ToolExecutionRequest`
+  - `toolType`: one of `SUBDOMAIN_ENUMERATION`, `HTTP_PROBE`, `PORT_SCAN`, `SERVICE_DETECTION`, `VULNERABILITY_SCAN`, `WEAK_PASSWORD_SCAN`
+  - `intensity`: `LOW | MEDIUM | HIGH`
+  - `target`: non-empty string
+  - `additionalParameters`: schema-checked record, default `{}`
+  - `timeoutSeconds`: optional positive integer
+- `ToolExecutionResult`
+  - `executionId`, `status`, `metadata`, `findings`, `errorMessage`
+- `ToolExecutionMetadata`
+  - `toolVersion`, `startedAt`, `completedAt`, `durationMs`, `parameters`, `exitCode`, `stdoutSha256`, `stderrSha256`, `artifactPaths`
+- Workflow result contracts for discovery/scanning must include:
+  - workflow id, `taskId`, `status`, `startedAt`, `completedAt`, `targetsScanned`, successful outputs, and per-target `errors`
+
+### 3. Contracts
+
+- Tool commands are assembled from registered `ToolConfig.baseCommand`, `allowedParameters`, intensity mappings, and the validated target only.
+- `additionalParameters` may override only registered allowed parameters; unknown parameter names must fail validation.
+- `undefined` override values are ignored so callers can build optional parameter maps without accidentally changing intensity defaults.
+- Runner evidence stores hashes and metadata, not raw stdout/stderr in domain results.
+- Workflow services must preserve successful target outputs when another target fails, times out, or returns a non-zero exit.
+- Asset discovery may record out-of-scope discovered assets as `OUT_OF_SCOPE_DISCOVERED`, but must not probe or add them to authorized scope.
+
+### 4. Validation & Error Matrix
+
+- Missing or malformed tool execution request -> `SchemaValidationError`
+- Unknown tool config or intensity mapping -> `TaskExecutionFailedError` or `SchemaValidationError`
+- Unknown `additionalParameters` key -> `SchemaValidationError`
+- Non-zero tool exit -> `ToolExecutionResult.status=FAILED` with safe error message
+- Runtime timeout -> `ToolExecutionResult.status=TIMEOUT`
+- User cancel or kill switch -> `ToolExecutionResult.status=CANCELLED`
+- One target succeeds and another fails -> workflow `PARTIAL_SUCCESS`
+- No target succeeds -> workflow `FAILED`
+- Kill switch cancels workflow -> workflow `CANCELLED`
+- Initial requested target outside asset scope -> `AssetScopeBlockedError`
+
+### 5. Good/Base/Bad Cases
+
+- Good: a vulnerability scan maps `MEDIUM` intensity to registered flags, stores tool version and stdout/stderr hashes, preserves one successful finding, and returns `PARTIAL_SUCCESS` when the next target fails.
+- Base: a service discovery request with `portRange` sets a validated `port_range` override and records per-target failures without leaking stderr.
+- Bad: a controller concatenates a user-provided shell string, silently accepts an unsupported flag, logs raw stderr, or probes an out-of-scope discovered domain.
+
+### 6. Tests Required
+
+- Unit tests for intensity mapping:
+  - rejects unsupported overrides
+  - ignores `undefined` overrides
+  - validates override value types
+- Unit tests for tool runner:
+  - safe failed result on non-zero exit
+  - timeout result and audit
+  - user cancel / kill-switch result and audit
+  - no raw stderr/stdout leakage in error messages
+- Unit tests for workflow services:
+  - out-of-scope discoveries are retained only as `OUT_OF_SCOPE_DISCOVERED`
+  - out-of-scope discoveries are not probed
+  - `PARTIAL_SUCCESS` preserves successful outputs and target errors
+  - cancellation returns `CANCELLED` with prior successful outputs preserved when applicable
+
+### 7. Wrong vs Correct
+
+#### Wrong
+
+```text
+Build a command string from user input, run it directly, and mark the whole scan failed when any target exits non-zero.
+```
+
+#### Correct
+
+```text
+Map intensity and approved overrides into structured argv, execute through the runner, store execution metadata/hashes, audit every transition, and return PARTIAL_SUCCESS when useful target results remain.
+```
+
+---
+
 ## Testing Requirements
 
 Every backend feature touching domain rules must include the appropriate mix of tests below.
