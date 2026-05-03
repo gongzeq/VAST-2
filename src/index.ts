@@ -1,6 +1,15 @@
 import { InMemoryAuditLog } from './modules/audit/persistence/in-memory-audit-log.js';
 import { AssetScopeService } from './modules/asset-scope/domain/asset-scope-service.js';
 import { AuthorizationService } from './modules/auth/domain/authorization-service.js';
+import { DashboardQueryService } from './modules/dashboard/domain/dashboard-query.service.js';
+import {
+  InMemoryAttackTrendRepository,
+  InMemoryLogIngestRecordRepository,
+  InMemoryLogSourceRepository,
+  InMemorySecurityLogEventRepository,
+} from './modules/log-ingestion/persistence/in-memory-log-ingestion-repositories.js';
+import { LogIngestionService } from './modules/log-ingestion/domain/log-ingestion.service.js';
+import { LogSourceManagementService } from './modules/log-ingestion/domain/log-source-management.service.js';
 import { InMemoryTaskRepository } from './modules/task-execution/contracts/task-execution.contract.js';
 import { TaskManagementService } from './modules/task-execution/domain/task-management.service.js';
 import { presentDomainError } from './app/http/present-domain-error.js';
@@ -12,6 +21,16 @@ export * from './modules/auth/contracts/actor-context.contract.js';
 export * from './modules/auth/domain/authorization-service.js';
 export * from './modules/asset-scope/contracts/asset-authorization.contract.js';
 export * from './modules/asset-scope/domain/asset-scope-service.js';
+export * from './modules/dashboard/contracts/dashboard-read.contract.js';
+export * from './modules/dashboard/domain/dashboard-query.service.js';
+export * from './modules/log-ingestion/contracts/log-ingestion.contract.js';
+export * from './modules/log-ingestion/contracts/log-repository.contract.js';
+export * from './modules/log-ingestion/domain/attack-trend-aggregator.js';
+export * from './modules/log-ingestion/domain/log-ingestion.service.js';
+export * from './modules/log-ingestion/domain/log-source-management.service.js';
+export * from './modules/log-ingestion/domain/security-log-parser.js';
+export * from './modules/log-ingestion/domain/security-log-redactor.js';
+export * from './modules/log-ingestion/persistence/in-memory-log-ingestion-repositories.js';
 export * from './modules/task-planning/contracts/task-plan.contract.js';
 export * from './modules/task-execution/contracts/task-execution.contract.js';
 export * from './modules/task-execution/domain/task-management.service.js';
@@ -22,11 +41,34 @@ export const createBackendFoundation = () => {
   const taskRepository = new InMemoryTaskRepository();
   const authorization = new AuthorizationService();
   const assetScope = new AssetScopeService();
+  const logSourceRepository = new InMemoryLogSourceRepository();
+  const logIngestRecordRepository = new InMemoryLogIngestRecordRepository();
+  const securityLogEventRepository = new InMemorySecurityLogEventRepository();
+  const attackTrendRepository = new InMemoryAttackTrendRepository();
   const taskManagement = new TaskManagementService({
     auditLog,
     taskRepository,
     authorization,
     assetScope,
+  });
+  const logSourceManagement = new LogSourceManagementService({
+    repository: logSourceRepository,
+    authorization,
+    auditLog,
+  });
+  const logIngestion = new LogIngestionService({
+    sourceRepository: logSourceRepository,
+    ingestRecordRepository: logIngestRecordRepository,
+    eventRepository: securityLogEventRepository,
+    trendRepository: attackTrendRepository,
+    assetScope,
+    auditLog,
+  });
+  const dashboardQuery = new DashboardQueryService({
+    eventRepository: securityLogEventRepository,
+    trendRepository: attackTrendRepository,
+    authorization,
+    auditLog,
   });
 
   return {
@@ -34,7 +76,14 @@ export const createBackendFoundation = () => {
     taskRepository,
     authorization,
     assetScope,
+    logSourceRepository,
+    logIngestRecordRepository,
+    securityLogEventRepository,
+    attackTrendRepository,
     taskManagement,
+    logSourceManagement,
+    logIngestion,
+    dashboardQuery,
     presentDomainError,
   };
 };
