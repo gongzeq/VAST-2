@@ -105,3 +105,37 @@ Implemented controlled tool execution, asset and service discovery workflows, vu
 ### Next Steps
 
 - None - task complete
+
+
+## Session 4: Backend log ingestion and dashboard API
+
+**Date**: 2026-05-03
+**Task**: Backend log ingestion and dashboard API
+**Branch**: `main`
+
+### Summary
+
+Implemented backend log ingestion contracts, services, dashboard read models, spec updates, and tests with passing typecheck and test suite.
+
+### Main Changes
+
+(Add details)
+
+### Git Commits
+
+| Hash | Message |
+|------|---------|
+| `47360b9` | (see git log) |
+| `af72c1a` | (see git log) |
+
+### Testing
+
+- [OK] (Add test results)
+
+### Status
+
+[OK] **Completed**
+
+### Next Steps
+
+- None - task complete
