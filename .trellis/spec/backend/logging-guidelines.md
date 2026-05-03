@@ -76,15 +76,22 @@ Use these backend data contracts as the minimum implementation shape:
   - `attack_type`, `classification_rule_id`, `confidence`, `explanation`
 - `AttackTrendBucket`
   - `window_start`, `window_end`, `log_type`, `attack_type`, `severity`, `src_ip_or_cidr`, `target_asset_id`, `action`, `event_count`
+- `DashboardQuery`
+  - `asset_group_id`, optional `log_type`, optional `since`, optional `until`, `trend_limit`, `event_limit`
+- `DashboardMetrics`
+  - `total_events`, `blocked_events`, `unresolved_targets`, `top_attack_types`, `trends`, `recent_events`
 
 ### 3. Contracts
 
 - MVP ingestion uses platform-owned Syslog / log receiver endpoints. Firewalls, WAFs, Nginx, and Apache actively forward logs to the platform.
 - Manual file import is not the primary ingestion path.
 - Lightweight collection agents are extension points only and must not be required for MVP behavior.
+- MVP parser-format support is `JSON`, `NGINX_ACCESS`, and `APACHE_ACCESS` until the contract is explicitly extended.
 - Raw log bodies must be processed in-memory only for parsing/redaction and then discarded.
+- The default line-size safety limit is 16 KiB before parse/redact. Oversized lines are truncated in-memory, `truncated=true` is persisted on the ingest record, and only metadata plus the truncated-line checksum may remain.
 - Persistent storage must keep only `LogIngestRecord`, redacted normalized events, and aggregated buckets.
 - Dashboard APIs consume `AttackTrendBucket` and redacted normalized events only.
+- Dashboard metric payloads may expose only derived counters, aggregate buckets, top attack-type summaries, and recent redacted normalized events. Query strings must be reduced to path-only `uri_path` before dashboard/report/LLM access.
 - LLM summaries may use aggregate metrics and redacted normalized event fields only.
 - If a target IP/domain does not match an authorized asset, keep it as an unresolved log event and do not add it to scan scope.
 
