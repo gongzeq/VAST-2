@@ -3,7 +3,7 @@
   "name": "frontend-dashboard-audit-and-admin",
   "title": "frontend: Dashboard、审计与管理配置",
   "description": "Implement dashboard, audit trail, and admin configuration surfaces with permission-aware UX.",
-  "status": "planning",
+  "status": "in_progress",
   "dev_type": null,
   "scope": null,
   "package": null,
