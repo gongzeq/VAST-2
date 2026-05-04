@@ -26,7 +26,8 @@
     "05-02-frontend-task-console-and-scope",
     "05-02-frontend-security-analysis-surfaces",
     "05-02-frontend-dashboard-audit-and-admin",
-    "05-02-integration-and-quality-verification"
+    "05-02-integration-and-quality-verification",
+    "05-04-backend-weak-password-cleartext-view"
   ],
   "parent": "05-01-security-analysis-platform-prd",
   "relatedFiles": [],

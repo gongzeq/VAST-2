@@ -3,7 +3,7 @@
   "name": "frontend-security-analysis-surfaces",
   "title": "frontend: 漏洞、弱口令、邮件与日志分析界面",
   "description": "Implement domain UI for vulnerability results, weak-password findings, phishing mail analysis, and log analysis surfaces.",
-  "status": "planning",
+  "status": "in_progress",
   "dev_type": null,
   "scope": null,
   "package": null,
@@ -18,7 +18,12 @@
   "commit": null,
   "pr_url": null,
   "subtasks": [],
-  "children": [],
+  "children": [
+    "05-04-frontend-vulnerability-surface",
+    "05-04-frontend-weak-password-surface",
+    "05-04-frontend-mail-analysis-surface",
+    "05-04-frontend-log-analysis-surface"
+  ],
   "parent": "05-02-security-analysis-platform-mvp",
   "relatedFiles": [],
   "notes": "Focuses on operator-facing domain pages with masking and sensitive visibility rules.",

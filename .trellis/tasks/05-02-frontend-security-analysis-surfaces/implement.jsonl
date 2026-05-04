@@ -1,0 +1,30 @@
+{"file": ".trellis/spec/frontend/index.md", "reason": "Frontend spec index for this tracker and all child implementation work."}
+{"file": ".trellis/spec/frontend/directory-structure.md", "reason": "Feature-first layout rules for vulnerability, phishing-mail, log-analysis, and weak-password surfaces."}
+{"file": ".trellis/spec/frontend/component-guidelines.md", "reason": "Stateful security UI, masked/sensitive display, explicit unavailable/unauthorized branches, and shared primitive rules."}
+{"file": ".trellis/spec/frontend/hook-guidelines.md", "reason": "Domain query hook naming, permission gating, query key shape, and sensitive polling rules."}
+{"file": ".trellis/spec/frontend/state-management.md", "reason": "URL state, server state, local state, global ActorContext, and sensitive temporary state boundaries."}
+{"file": ".trellis/spec/frontend/type-safety.md", "reason": "Backend contract mirroring policy, zod boundary validation, branded IDs, and no-backend-import rule."}
+{"file": ".trellis/spec/frontend/mock-api-conventions.md", "reason": "MSW handler layout, schema-validated mock responses, in-memory db reset, and required handler tests."}
+{"file": ".trellis/spec/frontend/quality-guidelines.md", "reason": "Forbidden/required UI patterns and test expectations for masking, authorization, and critical metric text summaries."}
+{"file": ".trellis/spec/guides/cross-layer-thinking-guide.md", "reason": "The tracker mirrors backend contracts into frontend schemas and defines API/MSW boundaries across layers."}
+{"file": ".trellis/spec/guides/code-reuse-thinking-guide.md", "reason": "The child surfaces must converge on shared patterns without prematurely duplicating or over-abstracting components."}
+{"file": ".trellis/tasks/05-01-security-analysis-platform-prd/prd.md", "reason": "Platform-level authority for roles, sensitive-output restrictions, mail/log/raw-body constraints, and MVP scope."}
+{"file": ".trellis/tasks/05-02-security-analysis-platform-mvp/prd.md", "reason": "Parent MVP task context and cross-task sequencing."}
+{"file": ".trellis/tasks/05-02-frontend-task-console-and-scope/prd.md", "reason": "Frontend shell, router, providers, MSW, fetch helper, ActorProvider, and shared component baseline established by the prerequisite task."}
+{"file": ".trellis/tasks/05-02-frontend-security-analysis-surfaces/prd.md", "reason": "Tracker PRD defining shared constraints, child list, dependency order, and acceptance criteria."}
+{"file": ".trellis/tasks/05-04-frontend-vulnerability-surface/prd.md", "reason": "Child surface PRD for vulnerability list/detail and shared list pattern baseline."}
+{"file": ".trellis/tasks/05-04-frontend-mail-analysis-surface/prd.md", "reason": "Child surface PRD for mail list/detail, raw-body non-display, and UNAVAILABLE/BODY_ONLY_SIZE_LIMIT branches."}
+{"file": ".trellis/tasks/05-04-frontend-log-analysis-surface/prd.md", "reason": "Child surface PRD for redacted log event stream, mandatory asset group query, and textual attack trend summaries."}
+{"file": ".trellis/tasks/05-04-frontend-weak-password-surface/prd.md", "reason": "Child surface PRD for masked weak-password findings, temporary cleartext/export constraints, and one-time password handling."}
+{"file": "web/README.md", "reason": "Current frontend package architecture, scripts, MSW assumptions, routes, and out-of-scope notes from the prerequisite frontend task."}
+{"file": "web/src/app/router/router.tsx", "reason": "Route registration point for child surfaces and route-level viewer/raw-evidence guards."}
+{"file": "web/src/app/msw/db.ts", "reason": "MSW in-memory database that child surface fixtures and handlers must extend."}
+{"file": "web/src/app/msw/handlers/index.ts", "reason": "MSW handler barrel that child endpoint handlers must join."}
+{"file": "web/src/shared/api/fetch-json.ts", "reason": "Only frontend network entrypoint and schema validation boundary."}
+{"file": "web/src/shared/auth", "reason": "Existing ActorContext and permission helpers for route-level and action-level gates."}
+{"file": "web/src/shared/components", "reason": "Existing shared primitives and state components to reuse before creating new shared UI."}
+{"file": "src/modules/vulnerability/contracts/vulnerability.contract.ts", "reason": "Backend source contract to mirror for vulnerability surface."}
+{"file": "src/modules/phishing-mail/contracts/mail-analysis.contract.ts", "reason": "Backend source contract to mirror for phishing-mail surface."}
+{"file": "src/modules/log-ingestion/contracts/log-ingestion.contract.ts", "reason": "Backend source contract to mirror for log-analysis surface."}
+{"file": "src/modules/log-ingestion/contracts/log-repository.contract.ts", "reason": "Backend query/read-model contract source for log events and attack trends."}
+{"file": "src/modules/report/contracts/report.contract.ts", "reason": "Backend source contract for weak-password masked findings and report/export flows."}

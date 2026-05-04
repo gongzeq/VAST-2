@@ -1,0 +1,10 @@
+{"file": ".trellis/spec/frontend/quality-guidelines.md", "reason": "UI forbidden patterns — primary checklist for code review of mail surface (sensitive fields, status fallback, raw body)."}
+{"file": ".trellis/spec/frontend/component-guidelines.md", "reason": "Verify UNAVAILABLE / BODY_ONLY_SIZE_LIMIT / FULL three-branch render is explicit; no color-only signaling; unauthorized vs empty vs error separation."}
+{"file": ".trellis/spec/frontend/state-management.md", "reason": "Verify URL state correctness for filter/sort/page/since/until; no copying server state to global; no rawBody anywhere."}
+{"file": ".trellis/spec/frontend/type-safety.md", "reason": "Verify no-any rule, runtime zod parse at MSW boundary, rawBodyStored z.literal(false) preserved in mirror."}
+{"file": ".trellis/spec/guides/cross-layer-thinking-guide.md", "reason": "Frontend mail contract mirror parity with backend src/modules/phishing-mail/contracts — checked field by field."}
+{"file": ".trellis/spec/guides/code-reuse-thinking-guide.md", "reason": "Confirm <StatusBadge>/<UnauthorizedState>/<EmptyState>/<ErrorState> reused, not duplicated; analysisMode literals not scattered."}
+{"file": ".trellis/tasks/05-04-frontend-mail-analysis-surface/prd.md", "reason": "Acceptance Criteria + R1–R10 used as the source of truth for trellis-check verdicts; raw-body grep self-check explicitly listed."}
+{"file": ".trellis/tasks/05-02-frontend-security-analysis-surfaces/prd.md", "reason": "Tracker shared-constraint compliance — viewer route gating / URL state / sensitive display rules cross-checked."}
+{"file": "src/modules/phishing-mail/contracts/mail-analysis.contract.ts", "reason": "Backend source-of-truth schema diffed against web mirror to catch drift, especially rawBodyStored: z.literal(false) preservation."}
+{"file": "src/modules/phishing-mail/contracts/mail-repository.contract.ts", "reason": "MailAnalysisQuery dimensions diffed against MSW handler implementation to ensure parity."}

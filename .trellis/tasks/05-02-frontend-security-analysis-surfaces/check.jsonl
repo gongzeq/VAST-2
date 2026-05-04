@@ -1,0 +1,15 @@
+{"file": ".trellis/spec/frontend/quality-guidelines.md", "reason": "Primary quality gate: masking, authorization, error/empty/unknown states, and test expectations."}
+{"file": ".trellis/spec/frontend/type-safety.md", "reason": "Verify frontend contract mirrors, zod parsing, no backend imports, and no domain any usage."}
+{"file": ".trellis/spec/frontend/mock-api-conventions.md", "reason": "Verify all MSW responses parse through schemas and handler tests cover success/error paths."}
+{"file": ".trellis/spec/frontend/state-management.md", "reason": "Verify URL state, TanStack Query server state, ActorContext global state, and sensitive temporary state are not mixed."}
+{"file": ".trellis/spec/frontend/component-guidelines.md", "reason": "Verify explicit domain branches, accessible text, masking badges, and no color-only state communication."}
+{"file": ".trellis/tasks/05-02-frontend-security-analysis-surfaces/prd.md", "reason": "Tracker-level acceptance criteria across all four child surfaces."}
+{"file": ".trellis/tasks/05-04-frontend-vulnerability-surface/prd.md", "reason": "Vulnerability child acceptance criteria and route/URL-state expectations."}
+{"file": ".trellis/tasks/05-04-frontend-mail-analysis-surface/prd.md", "reason": "Mail child acceptance criteria, raw-body non-display, and unavailable/body-only checks."}
+{"file": ".trellis/tasks/05-04-frontend-log-analysis-surface/prd.md", "reason": "Log child acceptance criteria, redactedFields rendering, mandatory assetGroupId, and text-first trend checks."}
+{"file": ".trellis/tasks/05-04-frontend-weak-password-surface/prd.md", "reason": "Weak-password child acceptance criteria, sensitive temporary state, export password, and permission-window checks."}
+{"file": "web/package.json", "reason": "Quality scripts: typecheck, test, build, lint."}
+{"file": "web/src/tests/setup.ts", "reason": "MSW test server reset and test harness behavior."}
+{"file": "web/src/app/router/router.tsx", "reason": "Verify all new routes and viewer/raw-evidence route guards."}
+{"file": "web/src/app/msw/handlers/index.ts", "reason": "Verify all new handlers are registered."}
+{"file": "web/src/shared/contracts", "reason": "Verify mirrored contracts exist for vulnerability, mail-analysis, log-ingestion, and weak-password/report-export surfaces."}
