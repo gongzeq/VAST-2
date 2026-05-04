@@ -3,7 +3,7 @@
   "name": "security-analysis-platform-mvp",
   "title": "implement: 智能网络安全分析平台 MVP",
   "description": "Implement the MVP defined by the PRD and generated backend/frontend specs.",
-  "status": "planning",
+  "status": "in_progress",
   "dev_type": null,
   "scope": null,
   "package": null,
