@@ -2,6 +2,16 @@ import { InMemoryAuditLog } from './modules/audit/persistence/in-memory-audit-lo
 import { AssetScopeService } from './modules/asset-scope/domain/asset-scope-service.js';
 import { AuthorizationService } from './modules/auth/domain/authorization-service.js';
 import { DashboardQueryService } from './modules/dashboard/domain/dashboard-query.service.js';
+import { MailAnalysisService } from './modules/phishing-mail/domain/mail-analysis.service.js';
+import {
+  InMemoryMailAnalysisRepository,
+  InMemoryMailGatewayRepository,
+} from './modules/phishing-mail/persistence/in-memory-mail-repositories.js';
+import { ReportExportService } from './modules/report/domain/report-export.service.js';
+import {
+  InMemoryReportExportRepository,
+  InMemoryReportRepository,
+} from './modules/report/persistence/in-memory-report-repositories.js';
 import {
   InMemoryAttackTrendRepository,
   InMemoryLogIngestRecordRepository,
@@ -31,6 +41,14 @@ export * from './modules/log-ingestion/domain/log-source-management.service.js';
 export * from './modules/log-ingestion/domain/security-log-parser.js';
 export * from './modules/log-ingestion/domain/security-log-redactor.js';
 export * from './modules/log-ingestion/persistence/in-memory-log-ingestion-repositories.js';
+export * from './modules/phishing-mail/contracts/mail-analysis.contract.js';
+export * from './modules/phishing-mail/contracts/mail-repository.contract.js';
+export * from './modules/phishing-mail/domain/mail-analysis.service.js';
+export * from './modules/phishing-mail/persistence/in-memory-mail-repositories.js';
+export * from './modules/report/contracts/report.contract.js';
+export * from './modules/report/contracts/report-repository.contract.js';
+export * from './modules/report/domain/report-export.service.js';
+export * from './modules/report/persistence/in-memory-report-repositories.js';
 export * from './modules/task-planning/contracts/task-plan.contract.js';
 export * from './modules/task-execution/contracts/task-execution.contract.js';
 export * from './modules/task-execution/domain/task-management.service.js';
@@ -45,6 +63,10 @@ export const createBackendFoundation = () => {
   const logIngestRecordRepository = new InMemoryLogIngestRecordRepository();
   const securityLogEventRepository = new InMemorySecurityLogEventRepository();
   const attackTrendRepository = new InMemoryAttackTrendRepository();
+  const mailGatewayRepository = new InMemoryMailGatewayRepository();
+  const mailAnalysisRepository = new InMemoryMailAnalysisRepository();
+  const reportRepository = new InMemoryReportRepository();
+  const reportExportRepository = new InMemoryReportExportRepository();
   const taskManagement = new TaskManagementService({
     auditLog,
     taskRepository,
@@ -70,6 +92,17 @@ export const createBackendFoundation = () => {
     authorization,
     auditLog,
   });
+  const mailAnalysis = new MailAnalysisService({
+    gatewayRepository: mailGatewayRepository,
+    analysisRepository: mailAnalysisRepository,
+    auditLog,
+  });
+  const reportExport = new ReportExportService({
+    reportRepository,
+    exportRepository: reportExportRepository,
+    authorization,
+    auditLog,
+  });
 
   return {
     auditLog,
@@ -80,10 +113,16 @@ export const createBackendFoundation = () => {
     logIngestRecordRepository,
     securityLogEventRepository,
     attackTrendRepository,
+    mailGatewayRepository,
+    mailAnalysisRepository,
+    reportRepository,
+    reportExportRepository,
     taskManagement,
     logSourceManagement,
     logIngestion,
     dashboardQuery,
+    mailAnalysis,
+    reportExport,
     presentDomainError,
   };
 };
