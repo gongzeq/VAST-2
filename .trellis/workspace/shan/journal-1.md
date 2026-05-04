@@ -173,3 +173,38 @@ Implemented phishing mail intake/analysis/forwarding (50 MiB body-only rule, fai
 ### Next Steps
 
 - None - task complete
+
+
+## Session 6: Frontend task console + asset scope + MSW mock API scaffold
+
+**Date**: 2026-05-04
+**Task**: Frontend task console + asset scope + MSW mock API scaffold
+**Branch**: `main`
+
+### Summary
+
+Scaffolded the new web/ frontend package (Vite + React 18 + TS strict + TanStack Query v5 + RR v6 + Tailwind v3 + MSW v2 + Vitest) implementing login, task console, task list, task detail (with 5s polling that stops on terminal lifecycle), asset scope, and discovered-asset queue. 122 source files, 16 MSW handlers, 6 routed pages, 17 test files (102 passing + 1 placeholder skipped). Backend zod schemas mirrored under web/src/shared/contracts/ rather than imported from src/ to keep the browser bundle Node-free. Captured the mirroring + MSW + selector-pattern + hand-rolled-shadcn conventions in .trellis/spec/frontend (type-safety, component-guidelines, new mock-api-conventions, index, cross-layer guide).
+
+### Main Changes
+
+(Add details)
+
+### Git Commits
+
+| Hash | Message |
+|------|---------|
+| `87d91f7` | (see git log) |
+| `1c67311` | (see git log) |
+| `5e1443f` | (see git log) |
+
+### Testing
+
+- [OK] (Add test results)
+
+### Status
+
+[OK] **Completed**
+
+### Next Steps
+
+- None - task complete
