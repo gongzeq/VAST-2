@@ -34,6 +34,31 @@ Rules:
 
 ---
 
+## Primitive Components
+
+The project uses Tailwind CSS with shadcn/ui visual conventions, but **does not run the `shadcn-ui` CLI**. Instead, low-level primitives (`Button`, `Card`, `Dialog`, `Input`, `Textarea`, `Select`, `Skeleton`, `StatusBadge`, `ConfirmationDialog`, `TaskStepTimeline`, `EmptyState`, `ErrorState`, `UnauthorizedState`) are hand-rolled in `web/src/shared/components/` using Tailwind classes.
+
+### Why
+
+- Keeps `npm install` deterministic and offline-friendly (no `npx shadcn add` interactive registry calls).
+- Keeps the primitive surface narrow — only what the codebase actually renders, no unused pieces.
+- Lets each consumer supply its own action vocabulary (e.g., the `<Dialog>` primitive only renders Cancel; consumers like `<AddWhitelistEntryDialog>` provide their own submit button via `children`). This prevents the "every dialog auto-submits" anti-pattern that breaks the high-risk preview/confirm separation.
+
+### Conventions
+
+- Primitives live under `web/src/shared/components/<PascalCase>.tsx` (one file per primitive).
+- Class composition uses a small `class-names.ts` helper (or `clsx`-equivalent) — do not pull in a runtime CSS-in-JS lib.
+- Domain-aware components (e.g., `<StatusBadge state>`, `<ConfirmationDialog>`) wrap primitives and live in the same folder; they import from primitives, never the other way around.
+- When a new primitive is needed (e.g., `Tabs`, `Toast`), hand-roll it following the same Tailwind-class pattern. Do not introduce a runtime UI library mid-project.
+
+### Forbidden
+
+- Running `npx shadcn-ui add ...` against this repo.
+- Pulling in `@radix-ui/*`, `@headlessui/*`, MUI, Chakra, or any other component runtime lib without a separate spec change approving the dependency.
+- Promoting a feature-local component to `shared/components/` before three feature folders import it with the same semantics (see Directory Structure).
+
+---
+
 ## Props Conventions
 
 - Props must be typed with feature contracts, not ad-hoc view models.

@@ -77,11 +77,14 @@ Before implementation:
 - [ ] Identified all layer boundaries
 - [ ] Defined format at each boundary
 - [ ] Decided where validation happens
+- [ ] If a frontend package needs backend zod schemas: mirror them under `web/src/shared/contracts/` (do NOT import from backend `src/`) — see `frontend/type-safety.md` "Backend Contract Mirroring"
+- [ ] If frontend depends on a not-yet-existing HTTP server: define the contract via MSW handlers + zod parse — see `frontend/mock-api-conventions.md`
 
 After implementation:
 - [ ] Tested with edge cases (null, empty, invalid)
 - [ ] Verified error handling at each boundary
 - [ ] Checked data survives round-trip
+- [ ] If contracts were mirrored: same PR updates both sides; integration package's `contracts-parity` script stays green
 
 ---
 

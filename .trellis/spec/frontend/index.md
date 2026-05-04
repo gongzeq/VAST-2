@@ -19,7 +19,8 @@ This directory contains frontend code-spec documents for the security analysis p
 | [Hook Guidelines](./hook-guidelines.md) | Query, mutation, polling, permission, and expiry-window hook conventions | Complete |
 | [State Management](./state-management.md) | Separation rules for local, global, server, URL, and sensitive temporary state | Complete |
 | [Quality Guidelines](./quality-guidelines.md) | UI-specific forbidden/required patterns, tests, and review checklist | Complete |
-| [Type Safety](./type-safety.md) | Shared contract, runtime validation, and sensitive-data typing rules | Complete |
+| [Type Safety](./type-safety.md) | Shared contract, runtime validation, sensitive-data typing, backend mirror policy | Complete |
+| [Mock API Conventions](./mock-api-conventions.md) | MSW handler layer, in-memory db reset, per-test override, demo lifecycle progression | Complete |
 
 ---
 
