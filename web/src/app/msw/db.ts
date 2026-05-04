@@ -8,7 +8,12 @@ import type {
   AssetWhitelistEntry,
   DiscoveredAssetRecord,
   TaskRecord,
+  VulnerabilityScanResult,
 } from '@/shared/contracts';
+
+export type MswVulnerabilityScanRecord = VulnerabilityScanResult & {
+  assetGroupId: string;
+};
 
 export interface MswDb {
   actor: ActorContext | null;
@@ -20,6 +25,7 @@ export interface MswDb {
    */
   whitelistAdditions: Map<string, AssetWhitelistEntry[]>;
   discoveredAssets: Map<string, DiscoveredAssetRecord>;
+  vulnerabilityScans: Map<string, MswVulnerabilityScanRecord>;
   /**
    * Polling-demo bookkeeping: each GET on /api/tasks/:taskId for the demo
    * task increments this counter so the lifecycle stage can advance.
@@ -255,6 +261,170 @@ function seedTasks(): Map<string, TaskRecord> {
   return tasks;
 }
 
+function seedVulnerabilityScans(): Map<string, MswVulnerabilityScanRecord> {
+  const scans = new Map<string, MswVulnerabilityScanRecord>();
+
+  scans.set('scan_internal_apache_partial', {
+    scanId: 'scan_internal_apache_partial',
+    taskId: 'task_partial_demo',
+    assetGroupId: 'ag_corp_internal',
+    status: 'PARTIAL_SUCCESS',
+    startedAt: nowIso(-10800),
+    completedAt: nowIso(-10500),
+    targetsScanned: 5,
+    findings: [
+      {
+        findingId: 'finding_apache_10_0_0_42',
+        vulnerabilityId: 'vuln_cve_2021_41773',
+        title: 'Apache Path Traversal / RCE',
+        description: 'Apache HTTP Server 2.4.49 path traversal exposure on reachable internal hosts.',
+        severity: 'CRITICAL',
+        cvssScore: 9.8,
+        cveReferences: [{ cveId: 'CVE-2021-41773' }],
+        affectedAsset: '10.0.0.42',
+        port: 80,
+        service: 'http',
+        evidence: 'GET /cgi-bin/.%2e/.%2e/.%2e/.%2e/bin/sh returned command execution marker.',
+        remediation: 'Upgrade Apache HTTP Server to a fixed version and disable vulnerable CGI exposure.',
+        status: 'OPEN',
+        discoveredAt: nowIso(-10400),
+        verifiedAt: nowIso(-10300),
+      },
+      {
+        findingId: 'finding_apache_10_0_0_43',
+        vulnerabilityId: 'vuln_cve_2021_41773',
+        title: 'Apache Path Traversal / RCE',
+        description: 'Apache HTTP Server 2.4.49 path traversal exposure on reachable internal hosts.',
+        severity: 'CRITICAL',
+        cvssScore: 9.8,
+        cveReferences: [{ cveId: 'CVE-2021-41773' }],
+        affectedAsset: '10.0.0.43',
+        port: 8080,
+        service: 'http-alt',
+        evidence: 'Traversal probe returned /etc/passwd signature.',
+        remediation: 'Upgrade Apache HTTP Server to a fixed version and remove traversal alias mappings.',
+        status: 'OPEN',
+        discoveredAt: nowIso(-10350),
+        verifiedAt: nowIso(-10290),
+      },
+      {
+        findingId: 'finding_apache_10_0_0_44',
+        vulnerabilityId: 'vuln_cve_2021_41773',
+        title: 'Apache Path Traversal / RCE',
+        description: 'Apache HTTP Server 2.4.49 path traversal exposure on reachable internal hosts.',
+        severity: 'CRITICAL',
+        cvssScore: 9.8,
+        cveReferences: [{ cveId: 'CVE-2021-41773' }],
+        affectedAsset: '10.0.0.44',
+        port: 80,
+        service: 'http',
+        evidence: 'Traversal probe confirmed alias bypass.',
+        remediation: null,
+        status: 'MITIGATED',
+        discoveredAt: nowIso(-10300),
+        verifiedAt: nowIso(-10100),
+      },
+      {
+        findingId: 'finding_apache_10_0_0_45',
+        vulnerabilityId: 'vuln_cve_2021_41773',
+        title: 'Apache Path Traversal / RCE',
+        description: 'Apache HTTP Server 2.4.49 path traversal exposure on reachable internal hosts.',
+        severity: 'CRITICAL',
+        cvssScore: 9.8,
+        cveReferences: [{ cveId: 'CVE-2021-41773' }],
+        affectedAsset: '10.0.0.45',
+        port: 443,
+        service: 'https',
+        evidence: 'Encoded traversal reached protected filesystem path.',
+        remediation: 'Patch Apache and validate all Alias directives.',
+        status: 'CONFIRMED',
+        discoveredAt: nowIso(-10250),
+        verifiedAt: nowIso(-10120),
+      },
+      {
+        findingId: 'finding_apache_10_0_0_46',
+        vulnerabilityId: 'vuln_cve_2021_41773',
+        title: 'Apache Path Traversal / RCE',
+        description: 'Apache HTTP Server 2.4.49 path traversal exposure on reachable internal hosts.',
+        severity: 'CRITICAL',
+        cvssScore: 9.8,
+        cveReferences: [{ cveId: 'CVE-2021-41773' }],
+        affectedAsset: '10.0.0.46',
+        port: 8443,
+        service: 'https-alt',
+        evidence: 'Traversal payload produced expected vulnerable response body.',
+        remediation: 'Patch Apache and restrict CGI endpoints.',
+        status: 'OPEN',
+        discoveredAt: nowIso(-10200),
+        verifiedAt: null,
+      },
+    ],
+    errors: [{ target: '10.0.0.47', error: 'scanner timeout' }],
+  });
+
+  scans.set('scan_public_tls_success', {
+    scanId: 'scan_public_tls_success',
+    taskId: 'task_running_demo',
+    assetGroupId: 'ag_corp_public',
+    status: 'SUCCESS',
+    startedAt: nowIso(-7200),
+    completedAt: nowIso(-7000),
+    targetsScanned: 2,
+    findings: [
+      {
+        findingId: 'finding_tls_api_example',
+        vulnerabilityId: 'vuln_tls_weak_cipher',
+        title: 'TLS weak cipher suite enabled',
+        description: 'Public HTTPS endpoint accepts legacy cipher suites.',
+        severity: 'HIGH',
+        cvssScore: 7.4,
+        cveReferences: [],
+        affectedAsset: 'api.example.com',
+        port: 443,
+        service: 'https',
+        evidence: 'TLS probe negotiated TLS_RSA_WITH_3DES_EDE_CBC_SHA.',
+        remediation: 'Disable legacy TLS cipher suites and enforce modern TLS policy.',
+        status: 'OPEN',
+        discoveredAt: nowIso(-6980),
+        verifiedAt: nowIso(-6900),
+      },
+    ],
+    errors: [],
+  });
+
+  scans.set('scan_public_info_success', {
+    scanId: 'scan_public_info_success',
+    taskId: 'task_running_demo',
+    assetGroupId: 'ag_corp_public',
+    status: 'SUCCESS',
+    startedAt: nowIso(-5400),
+    completedAt: nowIso(-5200),
+    targetsScanned: 1,
+    findings: [
+      {
+        findingId: 'finding_nginx_version_beta',
+        vulnerabilityId: 'vuln_nginx_version_disclosure',
+        title: 'Server version disclosure',
+        description: 'HTTP response headers expose server version metadata.',
+        severity: 'LOW',
+        cvssScore: null,
+        cveReferences: [],
+        affectedAsset: 'beta.example.com',
+        port: 80,
+        service: 'http',
+        evidence: 'Server: nginx/1.18.0 header observed.',
+        remediation: 'Disable server tokens in the web server configuration.',
+        status: 'ACCEPTED_RISK',
+        discoveredAt: nowIso(-5180),
+        verifiedAt: null,
+      },
+    ],
+    errors: [],
+  });
+
+  return scans;
+}
+
 let dbInstance: MswDb;
 
 export function buildFreshDb(): MswDb {
@@ -264,6 +434,7 @@ export function buildFreshDb(): MswDb {
     assetGroups: seedAssetGroups(),
     whitelistAdditions: new Map(),
     discoveredAssets: seedDiscoveredAssets(),
+    vulnerabilityScans: seedVulnerabilityScans(),
     pollCounters: new Map(),
   };
 }

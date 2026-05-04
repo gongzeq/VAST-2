@@ -9,13 +9,21 @@ import type {
   TaskLifecycleStage,
   TaskStepExecutionStatus,
 } from '@/shared/contracts/task-execution.contract';
+import type {
+  SeverityLevel,
+  VulnerabilityStatus,
+} from '@/shared/contracts/vulnerability.contract';
 import {
   assetDiscoveryVocabulary,
   intensityVocabulary,
   safeFallbackBadge,
+  severityVocabulary,
   stepStatusVocabulary,
   taskLifecycleVocabulary,
   taskStateVocabulary,
+  vulnerabilityScanStatusVocabulary,
+  type VulnerabilityScanResultStatus,
+  vulnerabilityStatusVocabulary,
   type Tone,
   type VocabularyEntry,
   yoloVocabulary,
@@ -38,6 +46,9 @@ export type StatusBadgeKind =
   | { kind: 'step-status'; value: TaskStepExecutionStatus }
   | { kind: 'asset-discovery'; value: AssetDiscoveryState }
   | { kind: 'intensity'; value: ExecutionIntensity }
+  | { kind: 'severity'; value: SeverityLevel }
+  | { kind: 'vulnerability-status'; value: VulnerabilityStatus }
+  | { kind: 'vulnerability-scan-status'; value: VulnerabilityScanResultStatus }
   | { kind: 'yolo' };
 
 export interface StatusBadgeProps {
@@ -63,6 +74,12 @@ function entryFor(status: StatusBadgeKind): VocabularyEntry {
       return assetDiscoveryVocabulary[status.value] ?? safeFallbackBadge;
     case 'intensity':
       return intensityVocabulary[status.value] ?? safeFallbackBadge;
+    case 'severity':
+      return severityVocabulary[status.value] ?? safeFallbackBadge;
+    case 'vulnerability-status':
+      return vulnerabilityStatusVocabulary[status.value] ?? safeFallbackBadge;
+    case 'vulnerability-scan-status':
+      return vulnerabilityScanStatusVocabulary[status.value] ?? safeFallbackBadge;
     case 'yolo':
       return yoloVocabulary;
   }

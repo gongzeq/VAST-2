@@ -8,3 +8,4 @@ export * from './task-execution.contract';
 export * from './task-intent.contract';
 export * from './branded-ids';
 export * from './task-execution-view-state';
+export * from './vulnerability.contract';

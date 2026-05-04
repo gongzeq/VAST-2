@@ -18,6 +18,16 @@ export interface TaskListFilters {
   sort?: string;
 }
 
+export interface VulnerabilityGroupFilters {
+  assetGroupId?: string;
+  severity?: string;
+  status?: string;
+  q?: string;
+  sort: string;
+  page: number;
+  pageSize: number;
+}
+
 export const queryKeys = {
   authSession: () => ['auth-session'] as const,
   taskList: (filters: TaskListFilters) =>
@@ -30,4 +40,8 @@ export const queryKeys = {
     ['discovered-assets', state ?? null] as const,
   discoveredAsset: (id: DiscoveredAssetId) =>
     ['discovered-asset', id] as const,
+  vulnerabilityGroups: (filters: VulnerabilityGroupFilters) =>
+    ['vulnerability-groups', filters] as const,
+  vulnerabilityGroup: (vulnerabilityId: string) =>
+    ['vulnerability-group', vulnerabilityId] as const,
 };

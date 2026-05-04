@@ -31,3 +31,8 @@ export function useCanViewAuditLog(): boolean {
   const { actor } = useCurrentActor();
   return hasPermission(actor, 'audit_log:view');
 }
+
+export function useCanViewRawEvidence(): boolean {
+  const { actor } = useCurrentActor();
+  return hasPermission(actor, 'raw_evidence:view');
+}

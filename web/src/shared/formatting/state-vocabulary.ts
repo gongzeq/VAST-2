@@ -11,6 +11,10 @@ import type {
   TaskLifecycleStage,
   TaskStepExecutionStatus,
 } from '@/shared/contracts/task-execution.contract';
+import type {
+  SeverityLevel,
+  VulnerabilityStatus,
+} from '@/shared/contracts/vulnerability.contract';
 
 export type Tone =
   | 'destructive'
@@ -73,6 +77,35 @@ export const yoloVocabulary: VocabularyEntry = {
   label: 'YOLO',
   tone: 'caution',
   description: '已开启 YOLO，授权范围内可跳过二次确认',
+};
+
+export const severityVocabulary: Record<SeverityLevel, VocabularyEntry> = {
+  CRITICAL: { label: '严重', tone: 'destructive' },
+  HIGH: { label: '高', tone: 'destructive' },
+  MEDIUM: { label: '中', tone: 'warning' },
+  LOW: { label: '低', tone: 'caution' },
+  INFO: { label: '信息', tone: 'muted' },
+};
+
+export const vulnerabilityStatusVocabulary: Record<VulnerabilityStatus, VocabularyEntry> = {
+  OPEN: { label: '待处理', tone: 'destructive' },
+  CONFIRMED: { label: '已确认', tone: 'warning' },
+  FALSE_POSITIVE: { label: '误报', tone: 'muted' },
+  MITIGATED: { label: '已缓解', tone: 'positive' },
+  ACCEPTED_RISK: { label: '风险接受', tone: 'caution' },
+};
+
+export type VulnerabilityScanResultStatus = 'SUCCESS' | 'PARTIAL_SUCCESS' | 'FAILED' | 'CANCELLED';
+
+export const vulnerabilityScanStatusVocabulary: Record<VulnerabilityScanResultStatus, VocabularyEntry> = {
+  SUCCESS: { label: '完整成功', tone: 'positive' },
+  PARTIAL_SUCCESS: {
+    label: '部分成功',
+    tone: 'caution',
+    description: '扫描部分失败，结果不完整',
+  },
+  FAILED: { label: '扫描失败', tone: 'destructive' },
+  CANCELLED: { label: '已取消', tone: 'muted' },
 };
 
 export const safeFallbackBadge: VocabularyEntry = {

@@ -34,6 +34,7 @@ export const permissionPoints = [
   'task:yolo_execute',
   'asset_scope:manage',
   'audit_log:view',
+  'raw_evidence:view',
   'report:export',
   'weak_password:cleartext_view',
   'weak_password:cleartext_export',
