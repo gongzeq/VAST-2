@@ -139,3 +139,37 @@ Implemented backend log ingestion contracts, services, dashboard read models, sp
 ### Next Steps
 
 - None - task complete
+
+
+## Session 5: Backend mail analysis and sensitive report exports
+
+**Date**: 2026-05-04
+**Task**: Backend mail analysis and sensitive report exports
+**Branch**: `main`
+
+### Summary
+
+Implemented phishing mail intake/analysis/forwarding (50 MiB body-only rule, fail-open on unavailable analyzer, deterministic risk labels, security-headers forwarding) and report/export services with permission-gated weak-password cleartext export (30-min window, never-stored one-time password, no raw-body persistence). Documented contracts in quality-guidelines.md spec scenario. Typecheck clean, 36 tests passing across 13 files.
+
+### Main Changes
+
+(Add details)
+
+### Git Commits
+
+| Hash | Message |
+|------|---------|
+| `30ed053` | (see git log) |
+| `0a93def` | (see git log) |
+
+### Testing
+
+- [OK] (Add test results)
+
+### Status
+
+[OK] **Completed**
+
+### Next Steps
+
+- None - task complete
