@@ -124,6 +124,76 @@ Map intensity and approved overrides into structured argv, execute through the r
 
 ---
 
+## Scenario: Mail Gateway Analysis And Sensitive Report Exports
+
+### 1. Scope / Trigger
+
+- Trigger: implementing phishing mail intake, SMTP gateway forwarding, report generation, report export, or weak-password cleartext export.
+- These flows are security-sensitive because mail must fail open without false verdicts, oversized mail must continue forwarding, and exports must not leak weak-password plaintext through reports, audit logs, or persisted metadata.
+
+### 2. Signatures
+
+Minimum backend contracts:
+
+- `InboundMailRequest`
+  - `gatewayId`, `sourceRef`, `rawMessage`, optional `sizeBytes`, `attachments`, `analysisAvailable`, optional `receivedAt`
+- `MailAnalysisRecord`
+  - `mailTaskId`, `gatewayId`, `assetGroupId`, `messageSizeBytes`, `bodySha256`, `rawBodyStored=false`, `analysisMode`, `analysisStatus`, `phishingLabel`, `riskScore`, `securityHeaders`, `attachmentAnalyses`, `iocs`, `forwardingResult`
+- `CreateReportCommand`
+  - `reportType`, `assetGroupId`, optional `taskId`, `title`, `summaryLines`, `sections`, `weakPasswordFindings`, `mailTaskIds`
+- `ExportWeakPasswordCleartextCommand`
+  - `assetGroupId`, `taskId`, `taskCompletedAt`, optional `requestedAt`, transient `findings`
+
+### 3. Contracts
+
+- Mail gateway mode forwards every accepted inbound message to the configured downstream host after adding security headers.
+- Risk labels are deterministic: score `>=80` -> `suspected`, `50-79` -> `suspicious`, `<50` -> `clean`.
+- Messages over 50 MiB use body-only analysis, skip attachment analysis, and set `X-Security-Analysis: body-only-size-limit`.
+- When analysis is unavailable, forwarding still succeeds with `X-Security-Analysis: unavailable`; do not emit phishing verdict or risk score headers.
+- Mail records may persist body hashes, headers summary, IOC structures, attachment metadata, risk signals, and forwarding status; do not persist raw message bodies.
+- Normal reports include only masked weak-password findings.
+- Weak-password cleartext export is a short-lived encrypted artifact flow: require permission, enforce the 30-minute post-completion window, return the random password once, and never store that password.
+
+### 4. Validation & Error Matrix
+
+- Unknown or disabled mail gateway -> `SchemaValidationError` plus `MAIL_GATEWAY_REJECTED` audit.
+- Source not allowed for a configured gateway -> `SchemaValidationError` plus `MAIL_GATEWAY_REJECTED` audit.
+- Actor lacks `report:export` -> `AuthorizationDeniedError`.
+- Actor lacks `weak_password:cleartext_export` -> `AuthorizationDeniedError`.
+- Actor lacks the target asset group -> `AuthorizationDeniedError`.
+- Weak-password cleartext export after the allowed window -> `SensitiveExportExpiredError` plus expiry audit.
+
+### 5. Good/Base/Bad Cases
+
+- Good: an oversized mail with attachments is forwarded, body-analyzed, attachment analyses are marked skipped, and the body is represented only by a hash.
+- Base: a standard phishing mail gets `X-Security-Phishing`, `X-Security-Risk-Score`, `X-Security-Task-ID`, and `X-Security-Analysis`.
+- Bad: unavailable analysis still writes a phishing verdict, stores raw mail body, blocks mail delivery, or records a weak-password plaintext value in an audit record.
+
+### 6. Tests Required
+
+- Unit tests for mail receive -> analyze -> tag -> forward.
+- Unit tests for the 50 MiB body-only rule and skipped attachment metadata.
+- Unit tests for fail-open unavailable analysis without verdict/risk headers.
+- Authorization tests for report export and weak-password cleartext export.
+- Expiry tests for the 30-minute weak-password cleartext export window.
+- Negative assertions that report records, export records, and audit logs do not contain raw mail bodies or weak-password plaintext.
+
+### 7. Wrong vs Correct
+
+#### Wrong
+
+```text
+Persist the full email body for later report generation, block forwarding when the analyzer is down, and store the XLSX export password for user convenience.
+```
+
+#### Correct
+
+```text
+Persist only safe mail metadata plus body hashes, fail open with an unavailable analysis header, and create short-lived encrypted weak-password exports whose one-time password is never stored.
+```
+
+---
+
 ## Testing Requirements
 
 Every backend feature touching domain rules must include the appropriate mix of tests below.
