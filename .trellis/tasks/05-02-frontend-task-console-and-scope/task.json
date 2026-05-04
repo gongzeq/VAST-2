@@ -3,7 +3,7 @@
   "name": "frontend-task-console-and-scope",
   "title": "frontend: 任务控制台、澄清确认与资产范围",
   "description": "Implement the analyst task console, task detail core states, clarification/confirmation UX, and asset scope management UI.",
-  "status": "planning",
+  "status": "in_progress",
   "dev_type": null,
   "scope": null,
   "package": null,
