@@ -40,6 +40,10 @@ export const permissionPoints = [
   'weak_password:cleartext_export',
   'log_source:manage',
   'log_event:export',
+  'dashboard:view',
+  'llm_provider:manage',
+  'tool_config:manage',
+  'kill_switch:operate',
 ] as const;
 
 export const permissionPointSchema = z.enum(permissionPoints);
