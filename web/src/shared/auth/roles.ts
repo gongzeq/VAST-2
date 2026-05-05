@@ -19,6 +19,7 @@ const ROLE_PERMISSIONS: Record<PresetRoleId, PermissionPoint[]> = {
     'task:confirm',
     'task:cancel',
     'task:yolo_execute',
+    'raw_evidence:view',
   ],
   admin: [
     'asset_scope:manage',
@@ -28,8 +29,8 @@ const ROLE_PERMISSIONS: Record<PresetRoleId, PermissionPoint[]> = {
     'tool_config:manage',
     'kill_switch:operate',
   ],
-  auditor: ['audit_log:view'],
-  viewer: [],
+  auditor: ['audit_log:view', 'raw_evidence:view'],
+  viewer: ['dashboard:view'],
 };
 
 const ROLE_LABELS: Record<PresetRoleId, string> = {

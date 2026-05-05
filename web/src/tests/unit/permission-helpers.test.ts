@@ -53,13 +53,19 @@ describe('permission helpers', () => {
     expect(hasAnyPermission(actor, ['report:export', 'log_event:export'])).toBe(false);
   });
 
-  it('viewer role has zero permission points', () => {
-    expect(permissionsForRole('viewer')).toEqual([]);
+  it('viewer role is dashboard-only', () => {
+    expect(permissionsForRole('viewer')).toEqual(['dashboard:view']);
   });
 
-  it('security-engineer has the four task permissions', () => {
+  it('security-engineer has the four task permissions plus raw evidence', () => {
     expect(new Set(permissionsForRole('security-engineer'))).toEqual(
-      new Set(['task:create', 'task:confirm', 'task:cancel', 'task:yolo_execute']),
+      new Set([
+        'task:create',
+        'task:confirm',
+        'task:cancel',
+        'task:yolo_execute',
+        'raw_evidence:view',
+      ]),
     );
   });
 
