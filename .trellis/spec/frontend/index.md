@@ -21,6 +21,7 @@ This directory contains frontend code-spec documents for the security analysis p
 | [Quality Guidelines](./quality-guidelines.md) | UI-specific forbidden/required patterns, tests, and review checklist | Complete |
 | [Type Safety](./type-safety.md) | Shared contract, runtime validation, sensitive-data typing, backend mirror policy | Complete |
 | [Mock API Conventions](./mock-api-conventions.md) | MSW handler layer, in-memory db reset, per-test override, demo lifecycle progression | Complete |
+| [PRD Alignment Surfaces](./prd-alignment-surfaces.md) | Executable contracts for finishing Dashboard, Audit, Admin, Mail, Log, and Weak Password surfaces | Active |
 
 ---
 

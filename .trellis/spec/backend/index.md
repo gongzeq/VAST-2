@@ -19,6 +19,7 @@ This directory contains backend code-spec documents for the security analysis pl
 | [Error Handling](./error-handling.md) | Typed domain error model, state transitions, retry rules, and API-safe failures | Complete |
 | [Quality Guidelines](./quality-guidelines.md) | Security-sensitive forbidden/required patterns, test minima, and review checklist | Complete |
 | [Logging Guidelines](./logging-guidelines.md) | Application/audit logging plus log-ingestion contracts with mandatory redaction and raw-body discard rules | Complete |
+| [PRD Alignment Contracts](./prd-alignment-contracts.md) | Contract parity, test-boundary, and runtime rules required by PRD alignment remediation | Active |
 
 ---
 

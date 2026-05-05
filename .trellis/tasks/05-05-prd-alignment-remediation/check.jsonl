@@ -1,0 +1,14 @@
+{"file": ".trellis/spec/backend/index.md", "reason": "Backend quality verification starts from the backend spec index."}
+{"file": ".trellis/spec/backend/prd-alignment-contracts.md", "reason": "Verify backend permission parity, root test boundary, and runtime contracts."}
+{"file": ".trellis/spec/backend/error-handling.md", "reason": "Verify authorization and schema validation errors remain API-safe."}
+{"file": ".trellis/spec/backend/logging-guidelines.md", "reason": "Verify no sensitive mail/log/weak-password data enters audit/application logs."}
+{"file": ".trellis/spec/backend/quality-guidelines.md", "reason": "Verify backend tests, typecheck, and quality checklist."}
+{"file": ".trellis/spec/frontend/index.md", "reason": "Frontend quality verification starts from the frontend spec index."}
+{"file": ".trellis/spec/frontend/prd-alignment-surfaces.md", "reason": "Verify every new surface follows task-specific route, MSW, and sensitive-display contracts."}
+{"file": ".trellis/spec/frontend/component-guidelines.md", "reason": "Verify components use explicit state, permission, empty, and error branches."}
+{"file": ".trellis/spec/frontend/hook-guidelines.md", "reason": "Verify query keys, mutations, invalidation, and polling behavior."}
+{"file": ".trellis/spec/frontend/state-management.md", "reason": "Verify sensitive temporary state is not persisted or globally cached."}
+{"file": ".trellis/spec/frontend/type-safety.md", "reason": "Verify zod mirrors and no unsafe type bypasses."}
+{"file": ".trellis/spec/frontend/mock-api-conventions.md", "reason": "Verify MSW handlers parse responses and mutate db through handlers."}
+{"file": ".trellis/spec/frontend/quality-guidelines.md", "reason": "Verify frontend typecheck/test/build/lint and required UI tests."}
+{"file": ".trellis/spec/guides/cross-layer-thinking-guide.md", "reason": "Review cross-layer flow and contract coverage."}

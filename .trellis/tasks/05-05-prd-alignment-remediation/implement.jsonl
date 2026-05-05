@@ -1,0 +1,17 @@
+{"file": ".trellis/spec/backend/index.md", "reason": "Backend spec index and pre-development checklist for contract/runtime changes."}
+{"file": ".trellis/spec/backend/prd-alignment-contracts.md", "reason": "Task-specific backend contract parity, test-boundary, and runtime rules."}
+{"file": ".trellis/spec/backend/directory-structure.md", "reason": "Backend module placement rules for weak-password and contract updates."}
+{"file": ".trellis/spec/backend/error-handling.md", "reason": "Authorization, schema validation, and domain error behavior for backend/MSW parity."}
+{"file": ".trellis/spec/backend/logging-guidelines.md", "reason": "Sensitive logging/redaction rules for mail, log, audit, and weak-password flows."}
+{"file": ".trellis/spec/backend/quality-guidelines.md", "reason": "Backend quality gate expectations and test minima."}
+{"file": ".trellis/spec/frontend/index.md", "reason": "Frontend spec index and pre-development checklist for UI work."}
+{"file": ".trellis/spec/frontend/prd-alignment-surfaces.md", "reason": "Task-specific frontend route, MSW, permission, and sensitive-display contracts."}
+{"file": ".trellis/spec/frontend/directory-structure.md", "reason": "Feature-first placement rules for new mail/log/weak-password surfaces."}
+{"file": ".trellis/spec/frontend/component-guidelines.md", "reason": "UI component and status/unauthorized/empty-state consistency rules."}
+{"file": ".trellis/spec/frontend/hook-guidelines.md", "reason": "TanStack Query, mutation, polling, URL-state, and permission hook conventions."}
+{"file": ".trellis/spec/frontend/state-management.md", "reason": "Server/local/URL/sensitive temporary state rules, especially weak-password export."}
+{"file": ".trellis/spec/frontend/type-safety.md", "reason": "Frontend zod mirror policy and forbidden type-safety bypasses."}
+{"file": ".trellis/spec/frontend/mock-api-conventions.md", "reason": "MSW handler, db reset, and zod parse conventions for frontend-first work."}
+{"file": ".trellis/spec/frontend/quality-guidelines.md", "reason": "Frontend quality gates and required tests."}
+{"file": ".trellis/spec/guides/cross-layer-thinking-guide.md", "reason": "Cross-layer data flow checklist for contract parity and surface work."}
+{"file": ".trellis/spec/guides/code-reuse-thinking-guide.md", "reason": "Reuse checklist before adding shared hooks, components, or query keys."}
