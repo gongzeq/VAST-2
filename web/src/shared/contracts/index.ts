@@ -9,3 +9,6 @@ export * from './task-intent.contract';
 export * from './branded-ids';
 export * from './task-execution-view-state';
 export * from './vulnerability.contract';
+export * from './dashboard-summary.contract';
+export * from './audit-log.contract';
+export * from './admin-config.contract';
