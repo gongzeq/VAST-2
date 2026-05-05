@@ -48,6 +48,13 @@ export const permissionPoints = [
   'weak_password:cleartext_export',
   'log_source:manage',
   'log_event:export',
+  // TODO(parity): added in frontend ahead of backend; reconcile in
+  // 05-02-integration-and-quality-verification when backend foundation tuple
+  // is extended for dashboard / admin surfaces.
+  'dashboard:view',
+  'llm_provider:manage',
+  'tool_config:manage',
+  'kill_switch:operate',
 ] as const;
 
 export const permissionPointSchema = z.enum(permissionPoints);

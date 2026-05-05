@@ -51,7 +51,7 @@ describe('mirrored zod contracts — round trip', () => {
     expect(executionIntensitySchema.options).toEqual(['LOW', 'MEDIUM', 'HIGH']);
   });
 
-  it('permissionPoint enum exposes all 12 points', () => {
+  it('permissionPoint enum exposes all 16 points', () => {
     expect(permissionPointSchema.options).toEqual([
       'task:create',
       'task:confirm',
@@ -65,6 +65,10 @@ describe('mirrored zod contracts — round trip', () => {
       'weak_password:cleartext_export',
       'log_source:manage',
       'log_event:export',
+      'dashboard:view',
+      'llm_provider:manage',
+      'tool_config:manage',
+      'kill_switch:operate',
     ]);
   });
 
