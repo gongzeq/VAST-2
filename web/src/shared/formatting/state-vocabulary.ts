@@ -15,6 +15,12 @@ import type {
   SeverityLevel,
   VulnerabilityStatus,
 } from '@/shared/contracts/vulnerability.contract';
+import type { AuditOutcome } from '@/shared/contracts/audit-log.contract';
+import type {
+  AdminEntityStatus,
+  KillSwitchStatus,
+  LogSourceHealth,
+} from '@/shared/contracts/admin-config.contract';
 
 export type Tone =
   | 'destructive'
@@ -112,4 +118,34 @@ export const safeFallbackBadge: VocabularyEntry = {
   label: '未知状态',
   tone: 'muted',
   description: '后端返回未识别的枚举值',
+};
+
+export const auditOutcomeVocabulary: Record<AuditOutcome, VocabularyEntry> = {
+  SUCCESS: { label: '成功', tone: 'positive' },
+  FAILURE: { label: '失败', tone: 'destructive' },
+  BLOCKED: { label: '阻断', tone: 'warning' },
+};
+
+export const killSwitchStatusVocabulary: Record<KillSwitchStatus, VocabularyEntry> = {
+  RUNNING: {
+    label: '运行中',
+    tone: 'positive',
+    description: '工具与受控辅助命令可正常执行',
+  },
+  STOPPED: {
+    label: '已停止',
+    tone: 'destructive',
+    description: '所有扫描工具与受控辅助命令已被冻结',
+  },
+};
+
+export const adminEntityStatusVocabulary: Record<AdminEntityStatus, VocabularyEntry> = {
+  ENABLED: { label: '已启用', tone: 'positive' },
+  DISABLED: { label: '已禁用', tone: 'muted' },
+};
+
+export const logSourceHealthVocabulary: Record<LogSourceHealth, VocabularyEntry> = {
+  HEALTHY: { label: '健康', tone: 'positive' },
+  DEGRADED: { label: '降级', tone: 'warning' },
+  UNKNOWN: { label: '未知', tone: 'muted' },
 };

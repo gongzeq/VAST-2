@@ -13,9 +13,19 @@ import type {
   SeverityLevel,
   VulnerabilityStatus,
 } from '@/shared/contracts/vulnerability.contract';
+import type { AuditOutcome } from '@/shared/contracts/audit-log.contract';
+import type {
+  AdminEntityStatus,
+  KillSwitchStatus,
+  LogSourceHealth,
+} from '@/shared/contracts/admin-config.contract';
 import {
+  adminEntityStatusVocabulary,
   assetDiscoveryVocabulary,
+  auditOutcomeVocabulary,
   intensityVocabulary,
+  killSwitchStatusVocabulary,
+  logSourceHealthVocabulary,
   safeFallbackBadge,
   severityVocabulary,
   stepStatusVocabulary,
@@ -49,6 +59,10 @@ export type StatusBadgeKind =
   | { kind: 'severity'; value: SeverityLevel }
   | { kind: 'vulnerability-status'; value: VulnerabilityStatus }
   | { kind: 'vulnerability-scan-status'; value: VulnerabilityScanResultStatus }
+  | { kind: 'audit-outcome'; value: AuditOutcome }
+  | { kind: 'kill-switch'; value: KillSwitchStatus }
+  | { kind: 'admin-status'; value: AdminEntityStatus }
+  | { kind: 'log-source-health'; value: LogSourceHealth }
   | { kind: 'yolo' };
 
 export interface StatusBadgeProps {
@@ -80,6 +94,14 @@ function entryFor(status: StatusBadgeKind): VocabularyEntry {
       return vulnerabilityStatusVocabulary[status.value] ?? safeFallbackBadge;
     case 'vulnerability-scan-status':
       return vulnerabilityScanStatusVocabulary[status.value] ?? safeFallbackBadge;
+    case 'audit-outcome':
+      return auditOutcomeVocabulary[status.value] ?? safeFallbackBadge;
+    case 'kill-switch':
+      return killSwitchStatusVocabulary[status.value] ?? safeFallbackBadge;
+    case 'admin-status':
+      return adminEntityStatusVocabulary[status.value] ?? safeFallbackBadge;
+    case 'log-source-health':
+      return logSourceHealthVocabulary[status.value] ?? safeFallbackBadge;
     case 'yolo':
       return yoloVocabulary;
   }
