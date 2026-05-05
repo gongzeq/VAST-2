@@ -6,10 +6,27 @@ import type {
   ActorContext,
   AssetGroup,
   AssetWhitelistEntry,
+  AuditLogEntry,
+  DashboardSummary,
   DiscoveredAssetRecord,
+  KillSwitchState,
+  LlmProvider,
+  LogSource,
+  MailSource,
   TaskRecord,
+  ToolConfig,
   VulnerabilityScanResult,
 } from '@/shared/contracts';
+
+import {
+  seedAuditLog,
+  seedDashboardSummary,
+  seedKillSwitch,
+  seedLlmProviders,
+  seedLogSources,
+  seedMailSources,
+  seedToolConfigs,
+} from './operations-seeds';
 
 export type MswVulnerabilityScanRecord = VulnerabilityScanResult & {
   assetGroupId: string;
@@ -31,6 +48,14 @@ export interface MswDb {
    * task increments this counter so the lifecycle stage can advance.
    */
   pollCounters: Map<string, number>;
+  // --- Operations surfaces (dashboard / audit / admin) -----------------
+  dashboardSummary: DashboardSummary;
+  auditLogEntries: Map<string, AuditLogEntry>;
+  llmProviders: Map<string, LlmProvider>;
+  toolConfigs: Map<string, ToolConfig>;
+  logSources: Map<string, LogSource>;
+  mailSources: Map<string, MailSource>;
+  killSwitch: KillSwitchState;
 }
 
 function nowIso(offsetSeconds = 0): string {
@@ -436,6 +461,13 @@ export function buildFreshDb(): MswDb {
     discoveredAssets: seedDiscoveredAssets(),
     vulnerabilityScans: seedVulnerabilityScans(),
     pollCounters: new Map(),
+    dashboardSummary: seedDashboardSummary(),
+    auditLogEntries: seedAuditLog(),
+    llmProviders: seedLlmProviders(),
+    toolConfigs: seedToolConfigs(),
+    logSources: seedLogSources(),
+    mailSources: seedMailSources(),
+    killSwitch: seedKillSwitch(),
   };
 }
 

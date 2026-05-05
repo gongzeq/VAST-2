@@ -7,8 +7,6 @@
  */
 import { z } from 'zod';
 
-import { executionIntensitySchema } from './foundation';
-
 // ===========================================================================
 // 1. LLM Provider
 // ===========================================================================
@@ -122,8 +120,8 @@ export const toolConfigUpdateRequestSchema = z.object({
 });
 export type ToolConfigUpdateRequest = z.infer<typeof toolConfigUpdateRequestSchema>;
 
-// Re-export for caller convenience.
-export { executionIntensitySchema };
+// (executionIntensitySchema is imported by consumers from foundation.ts /
+// the contracts index barrel.)
 
 // ===========================================================================
 // 3. Log Sources

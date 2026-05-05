@@ -5,6 +5,7 @@ import {
   apiErrorResponseSchema,
   assetGroupListResponseSchema,
   assetGroupSchema,
+  dashboardSummarySchema,
   discoveredAssetListResponseSchema,
   discoveredAssetRecordSchema,
   taskIntentResponseSchema,
@@ -270,5 +271,57 @@ describe('MSW handler responses parse against the mirrored contracts', () => {
     );
     expect(status).toBe(200);
     expect(discoveredAssetRecordSchema.parse(payload).status).toBe('REJECTED');
+  });
+
+  it('GET /api/dashboard/summary 401 when not logged in', async () => {
+    const { status, payload } = await jsonRequest('GET', '/api/dashboard/summary');
+    expect(status).toBe(401);
+    expect(apiErrorResponseSchema.parse(payload).error_code).toBe('AUTHORIZATION_DENIED');
+  });
+
+  it('GET /api/dashboard/summary returns a parseable DashboardSummary for owned scope', async () => {
+    await jsonRequest('POST', '/api/auth/session', {
+      username: 'alice',
+      roleId: 'security-engineer',
+    });
+    const { status, payload } = await jsonRequest(
+      'GET',
+      '/api/dashboard/summary?scope=owned',
+    );
+    expect(status).toBe(200);
+    const parsed = dashboardSummarySchema.parse(payload);
+    expect(parsed.scope).toBe('owned');
+    // All 7 categories present.
+    const kinds = parsed.categories.map((c) => c.kind).sort();
+    expect(kinds).toEqual(
+      ['asset', 'log-attack', 'mail', 'task', 'vulnerability', 'weak-password', 'yolo'].sort(),
+    );
+  });
+
+  it('GET /api/dashboard/summary?scope=global 403s for non-admin', async () => {
+    await jsonRequest('POST', '/api/auth/session', {
+      username: 'alice',
+      roleId: 'security-engineer',
+    });
+    const { status, payload } = await jsonRequest(
+      'GET',
+      '/api/dashboard/summary?scope=global',
+    );
+    expect(status).toBe(403);
+    const parsed = apiErrorResponseSchema.parse(payload);
+    expect(parsed.error_code).toBe('AUTHORIZATION_DENIED');
+  });
+
+  it('GET /api/dashboard/summary?scope=global 200 for admin', async () => {
+    await jsonRequest('POST', '/api/auth/session', {
+      username: 'root',
+      roleId: 'admin',
+    });
+    const { status, payload } = await jsonRequest(
+      'GET',
+      '/api/dashboard/summary?scope=global',
+    );
+    expect(status).toBe(200);
+    expect(dashboardSummarySchema.parse(payload).scope).toBe('global');
   });
 });

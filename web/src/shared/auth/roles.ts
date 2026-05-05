@@ -20,7 +20,14 @@ const ROLE_PERMISSIONS: Record<PresetRoleId, PermissionPoint[]> = {
     'task:cancel',
     'task:yolo_execute',
   ],
-  admin: ['asset_scope:manage', 'audit_log:view', 'log_source:manage'],
+  admin: [
+    'asset_scope:manage',
+    'audit_log:view',
+    'log_source:manage',
+    'llm_provider:manage',
+    'tool_config:manage',
+    'kill_switch:operate',
+  ],
   auditor: ['audit_log:view'],
   viewer: [],
 };
