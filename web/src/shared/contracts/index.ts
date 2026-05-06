@@ -12,3 +12,4 @@ export * from './vulnerability.contract';
 export * from './dashboard-summary.contract';
 export * from './audit-log.contract';
 export * from './admin-config.contract';
+export * from './mail-analysis.contract';

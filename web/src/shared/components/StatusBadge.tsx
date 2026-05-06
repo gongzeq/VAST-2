@@ -19,6 +19,10 @@ import type {
   KillSwitchStatus,
   LogSourceHealth,
 } from '@/shared/contracts/admin-config.contract';
+import type {
+  MailAnalysisMode,
+  PhishingLabel,
+} from '@/shared/contracts/mail-analysis.contract';
 import {
   adminEntityStatusVocabulary,
   assetDiscoveryVocabulary,
@@ -26,6 +30,8 @@ import {
   intensityVocabulary,
   killSwitchStatusVocabulary,
   logSourceHealthVocabulary,
+  mailAnalysisModeVocabulary,
+  phishingLabelVocabulary,
   safeFallbackBadge,
   severityVocabulary,
   stepStatusVocabulary,
@@ -63,6 +69,8 @@ export type StatusBadgeKind =
   | { kind: 'kill-switch'; value: KillSwitchStatus }
   | { kind: 'admin-status'; value: AdminEntityStatus }
   | { kind: 'log-source-health'; value: LogSourceHealth }
+  | { kind: 'phishing-label'; value: PhishingLabel }
+  | { kind: 'mail-analysis-mode'; value: MailAnalysisMode }
   | { kind: 'yolo' };
 
 export interface StatusBadgeProps {
@@ -102,6 +110,10 @@ function entryFor(status: StatusBadgeKind): VocabularyEntry {
       return adminEntityStatusVocabulary[status.value] ?? safeFallbackBadge;
     case 'log-source-health':
       return logSourceHealthVocabulary[status.value] ?? safeFallbackBadge;
+    case 'phishing-label':
+      return phishingLabelVocabulary[status.value] ?? safeFallbackBadge;
+    case 'mail-analysis-mode':
+      return mailAnalysisModeVocabulary[status.value] ?? safeFallbackBadge;
     case 'yolo':
       return yoloVocabulary;
   }

@@ -21,6 +21,10 @@ import type {
   KillSwitchStatus,
   LogSourceHealth,
 } from '@/shared/contracts/admin-config.contract';
+import type {
+  MailAnalysisMode,
+  PhishingLabel,
+} from '@/shared/contracts/mail-analysis.contract';
 
 export type Tone =
   | 'destructive'
@@ -148,4 +152,36 @@ export const logSourceHealthVocabulary: Record<LogSourceHealth, VocabularyEntry>
   HEALTHY: { label: '健康', tone: 'positive' },
   DEGRADED: { label: '降级', tone: 'warning' },
   UNKNOWN: { label: '未知', tone: 'muted' },
+};
+
+export const phishingLabelVocabulary: Record<PhishingLabel, VocabularyEntry> = {
+  suspected: {
+    label: '疑似钓鱼',
+    tone: 'destructive',
+    description: '风险评分 >= 80，强烈怀疑为钓鱼邮件',
+  },
+  suspicious: {
+    label: '可疑',
+    tone: 'warning',
+    description: '风险评分 50-79，存在可疑特征',
+  },
+  clean: {
+    label: '清洁',
+    tone: 'positive',
+    description: '风险评分 < 50，无明显钓鱼特征',
+  },
+};
+
+export const mailAnalysisModeVocabulary: Record<MailAnalysisMode, VocabularyEntry> = {
+  FULL: { label: '完整分析', tone: 'positive' },
+  BODY_ONLY_SIZE_LIMIT: {
+    label: '附件未分析',
+    tone: 'warning',
+    description: '邮件超过 50MB 上限，仅分析正文',
+  },
+  UNAVAILABLE: {
+    label: '分析不可用',
+    tone: 'destructive',
+    description: '分析服务不可用，邮件已 fail-open 转发',
+  },
 };

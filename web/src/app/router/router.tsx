@@ -11,6 +11,8 @@ import { AssetScopePage } from '@/features/asset-scope/routes/asset-scope-page';
 import { DiscoveredAssetsPage } from '@/features/asset-scope/routes/discovered-assets-page';
 import { VulnerabilityListPage } from '@/features/vulnerability/routes/vulnerability-list-page';
 import { VulnerabilityDetailPage } from '@/features/vulnerability/routes/vulnerability-detail-page';
+import { MailListPage } from '@/features/mails/routes/mail-list-page';
+import { MailDetailPage } from '@/features/mails/routes/mail-detail-page';
 import { DashboardPage } from '@/features/dashboard';
 import { AuditLogPage } from '@/features/audit';
 import {
@@ -74,6 +76,8 @@ export const routes = [
             children: [
               { path: 'vulnerabilities', element: <VulnerabilityListPage /> },
               { path: 'vulnerabilities/:vulnerabilityId', element: <VulnerabilityDetailPage /> },
+              { path: 'mails', element: <MailListPage /> },
+              { path: 'mails/:mailTaskId', element: <MailDetailPage /> },
             ],
           },
           { path: '*', element: <Navigate to="/" replace /> },

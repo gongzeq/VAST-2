@@ -12,6 +12,8 @@ import type {
   KillSwitchState,
   LlmProvider,
   LogSource,
+  MailAnalysisRecord,
+  MailGatewayConfig,
   MailSource,
   TaskRecord,
   ToolConfig,
@@ -56,6 +58,8 @@ export interface MswDb {
   logSources: Map<string, LogSource>;
   mailSources: Map<string, MailSource>;
   killSwitch: KillSwitchState;
+  mailAnalyses: Map<string, MailAnalysisRecord>;
+  mailGateways: Map<string, MailGatewayConfig>;
 }
 
 function nowIso(offsetSeconds = 0): string {
@@ -452,6 +456,312 @@ function seedVulnerabilityScans(): Map<string, MswVulnerabilityScanRecord> {
 
 let dbInstance: MswDb;
 
+function seedMailGateways(): Map<string, MailGatewayConfig> {
+  const gateways = new Map<string, MailGatewayConfig>();
+  gateways.set('mgw_corp_primary', {
+    gatewayId: 'mgw_corp_primary',
+    assetGroupId: 'ag_corp_public',
+    inboundSourceRefs: ['inbound-mx-1.example.com'],
+    downstreamHost: 'mx.corp.internal',
+    downstreamPort: 25,
+    enabled: true,
+  });
+  gateways.set('mgw_corp_secondary', {
+    gatewayId: 'mgw_corp_secondary',
+    assetGroupId: 'ag_corp_internal',
+    inboundSourceRefs: ['inbound-mx-2.example.com'],
+    downstreamHost: 'mx2.corp.internal',
+    downstreamPort: 25,
+    enabled: true,
+  });
+  return gateways;
+}
+
+function seedMailAnalyses(): Map<string, MailAnalysisRecord> {
+  const records = new Map<string, MailAnalysisRecord>();
+
+  records.set('mail_suspected_demo', {
+    mailTaskId: 'mail_suspected_demo',
+    gatewayId: 'mgw_corp_primary',
+    assetGroupId: 'ag_corp_public',
+    sourceRef: 'msg-uid-001',
+    receivedAt: nowIso(-3600),
+    subject: '【紧急】您的账户即将被冻结，请立即验证',
+    from: 'security-alerts@corp-secure-login.io',
+    recipients: ['alice@example.com', 'bob@example.com', 'carol@example.com', 'dave@example.com'],
+    messageSizeBytes: 28_400,
+    bodySha256: 'a1b2c3d4e5f60718293a4b5c6d7e8f90a1b2c3d4e5f60718293a4b5c6d7e8f90',
+    rawBodyStored: false,
+    analysisMode: 'FULL',
+    analysisStatus: 'ANALYZED',
+    phishingLabel: 'suspected',
+    riskScore: 92,
+    securityHeaders: {
+      'X-Security-Phishing': 'suspected',
+      'X-Security-Risk-Score': '92',
+      'X-Security-Task-ID': 'mail_suspected_demo',
+      'X-Security-Analysis': 'ok',
+      'X-Original-Sender': 'security-alerts@corp-secure-login.io',
+    },
+    attachmentAnalyses: [
+      {
+        filename: 'invoice.pdf.exe',
+        sizeBytes: 18_240,
+        contentType: 'application/octet-stream',
+        sha256: 'f1' + '0'.repeat(62),
+        analyzed: true,
+        skippedReason: null,
+        fileType: 'PE32 executable',
+        riskSignals: ['executable-disguised-as-pdf'],
+      },
+    ],
+    iocs: [
+      { kind: 'URL', value: 'https://corp-secure-login.io/verify' },
+      { kind: 'DOMAIN', value: 'corp-secure-login.io' },
+      { kind: 'IP', value: '203.0.113.55' },
+      { kind: 'EMAIL', value: 'security-alerts@corp-secure-login.io' },
+    ],
+    forwardingResult: {
+      status: 'FORWARDED',
+      downstreamHost: 'mx.corp.internal',
+      downstreamPort: 25,
+      forwardedAt: nowIso(-3590),
+      appliedHeaders: {
+        'X-Security-Phishing': 'suspected',
+        'X-Security-Risk-Score': '92',
+        'X-Security-Task-ID': 'mail_suspected_demo',
+        'X-Security-Analysis': 'ok',
+      },
+    },
+    riskSignals: ['spf:fail', 'dkim:fail', 'urgency-language', 'lookalike-domain'],
+    unavailableReason: null,
+  });
+
+  records.set('mail_clean_demo', {
+    mailTaskId: 'mail_clean_demo',
+    gatewayId: 'mgw_corp_primary',
+    assetGroupId: 'ag_corp_public',
+    sourceRef: 'msg-uid-002',
+    receivedAt: nowIso(-7200),
+    subject: 'Q3 Engineering all-hands recap',
+    from: 'eng-comms@example.com',
+    recipients: ['alice@example.com'],
+    messageSizeBytes: 12_400,
+    bodySha256: 'b2'.repeat(32),
+    rawBodyStored: false,
+    analysisMode: 'FULL',
+    analysisStatus: 'ANALYZED',
+    phishingLabel: 'clean',
+    riskScore: 8,
+    securityHeaders: {
+      'X-Security-Phishing': 'clean',
+      'X-Security-Risk-Score': '8',
+      'X-Security-Task-ID': 'mail_clean_demo',
+      'X-Security-Analysis': 'ok',
+    },
+    attachmentAnalyses: [],
+    iocs: [],
+    forwardingResult: {
+      status: 'FORWARDED',
+      downstreamHost: 'mx.corp.internal',
+      downstreamPort: 25,
+      forwardedAt: nowIso(-7195),
+      appliedHeaders: {
+        'X-Security-Phishing': 'clean',
+        'X-Security-Risk-Score': '8',
+        'X-Security-Task-ID': 'mail_clean_demo',
+        'X-Security-Analysis': 'ok',
+      },
+    },
+    riskSignals: [],
+    unavailableReason: null,
+  });
+
+  records.set('mail_suspicious_demo', {
+    mailTaskId: 'mail_suspicious_demo',
+    gatewayId: 'mgw_corp_secondary',
+    assetGroupId: 'ag_corp_internal',
+    sourceRef: 'msg-uid-003',
+    receivedAt: nowIso(-1800),
+    subject: 'Re: Project handoff documents',
+    from: 'pmgr@example-vendor.com',
+    recipients: ['eng-team@example.com'],
+    messageSizeBytes: 60_000,
+    bodySha256: 'c3'.repeat(32),
+    rawBodyStored: false,
+    analysisMode: 'FULL',
+    analysisStatus: 'ANALYZED',
+    phishingLabel: 'suspicious',
+    riskScore: 65,
+    securityHeaders: {
+      'X-Security-Phishing': 'suspicious',
+      'X-Security-Risk-Score': '65',
+      'X-Security-Task-ID': 'mail_suspicious_demo',
+      'X-Security-Analysis': 'ok',
+    },
+    attachmentAnalyses: [
+      {
+        filename: 'handoff.xlsx',
+        sizeBytes: 35_000,
+        contentType: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+        sha256: 'd4'.repeat(32),
+        analyzed: true,
+        skippedReason: null,
+        fileType: 'Office OOXML',
+        riskSignals: ['macro-present'],
+      },
+    ],
+    iocs: [{ kind: 'DOMAIN', value: 'example-vendor.com' }],
+    forwardingResult: {
+      status: 'FORWARDED',
+      downstreamHost: 'mx2.corp.internal',
+      downstreamPort: 25,
+      forwardedAt: nowIso(-1795),
+      appliedHeaders: {
+        'X-Security-Phishing': 'suspicious',
+        'X-Security-Risk-Score': '65',
+        'X-Security-Task-ID': 'mail_suspicious_demo',
+        'X-Security-Analysis': 'ok',
+      },
+    },
+    riskSignals: ['unusual-attachment', 'spf:softfail'],
+    unavailableReason: null,
+  });
+
+  records.set('mail_oversize_demo', {
+    mailTaskId: 'mail_oversize_demo',
+    gatewayId: 'mgw_corp_primary',
+    assetGroupId: 'ag_corp_public',
+    sourceRef: 'msg-uid-004',
+    receivedAt: nowIso(-900),
+    subject: 'Customer reference photos (large)',
+    from: 'partner@example-partner.io',
+    recipients: ['marketing@example.com'],
+    messageSizeBytes: 65 * 1024 * 1024,
+    bodySha256: 'e5'.repeat(32),
+    rawBodyStored: false,
+    analysisMode: 'BODY_ONLY_SIZE_LIMIT',
+    analysisStatus: 'ANALYZED',
+    phishingLabel: 'clean',
+    riskScore: 12,
+    securityHeaders: {
+      'X-Security-Phishing': 'clean',
+      'X-Security-Risk-Score': '12',
+      'X-Security-Task-ID': 'mail_oversize_demo',
+      'X-Security-Analysis': 'body-only-size-limit',
+    },
+    attachmentAnalyses: [
+      {
+        filename: 'photos-bundle.zip',
+        sizeBytes: 60 * 1024 * 1024,
+        contentType: 'application/zip',
+        sha256: 'f6'.repeat(32),
+        analyzed: false,
+        skippedReason: '邮件超 50MB 上限，附件未分析',
+        fileType: null,
+        riskSignals: [],
+      },
+    ],
+    iocs: [],
+    forwardingResult: {
+      status: 'FORWARDED',
+      downstreamHost: 'mx.corp.internal',
+      downstreamPort: 25,
+      forwardedAt: nowIso(-895),
+      appliedHeaders: {
+        'X-Security-Phishing': 'clean',
+        'X-Security-Risk-Score': '12',
+        'X-Security-Task-ID': 'mail_oversize_demo',
+        'X-Security-Analysis': 'body-only-size-limit',
+      },
+    },
+    riskSignals: [],
+    unavailableReason: null,
+  });
+
+  records.set('mail_unavailable_demo', {
+    mailTaskId: 'mail_unavailable_demo',
+    gatewayId: 'mgw_corp_primary',
+    assetGroupId: 'ag_corp_public',
+    sourceRef: 'msg-uid-005',
+    receivedAt: nowIso(-300),
+    subject: null,
+    from: null,
+    recipients: ['ops@example.com'],
+    messageSizeBytes: 8_400,
+    bodySha256: 'a7'.repeat(32),
+    rawBodyStored: false,
+    analysisMode: 'UNAVAILABLE',
+    analysisStatus: 'UNAVAILABLE',
+    phishingLabel: null,
+    riskScore: null,
+    securityHeaders: {
+      'X-Security-Task-ID': 'mail_unavailable_demo',
+      'X-Security-Analysis': 'unavailable',
+    },
+    attachmentAnalyses: [],
+    iocs: [],
+    forwardingResult: {
+      status: 'FORWARDED',
+      downstreamHost: 'mx.corp.internal',
+      downstreamPort: 25,
+      forwardedAt: nowIso(-295),
+      appliedHeaders: {
+        'X-Security-Task-ID': 'mail_unavailable_demo',
+        'X-Security-Analysis': 'unavailable',
+      },
+    },
+    riskSignals: [],
+    unavailableReason: '分析服务暂时不可达；邮件按 fail-open 策略已转发。',
+  });
+
+  // Spread out a few more clean records to exercise pagination.
+  for (let i = 0; i < 5; i += 1) {
+    const id = `mail_filler_${i}`;
+    records.set(id, {
+      mailTaskId: id,
+      gatewayId: 'mgw_corp_primary',
+      assetGroupId: 'ag_corp_public',
+      sourceRef: `msg-filler-${i}`,
+      receivedAt: nowIso(-86400 - i * 600),
+      subject: `Newsletter ${i + 1}`,
+      from: 'news@example.com',
+      recipients: ['alice@example.com'],
+      messageSizeBytes: 4_000 + i * 200,
+      bodySha256: ('aa' + i.toString(16).padStart(2, '0')).repeat(16),
+      rawBodyStored: false,
+      analysisMode: 'FULL',
+      analysisStatus: 'ANALYZED',
+      phishingLabel: 'clean',
+      riskScore: 5,
+      securityHeaders: {
+        'X-Security-Phishing': 'clean',
+        'X-Security-Risk-Score': '5',
+        'X-Security-Task-ID': id,
+        'X-Security-Analysis': 'ok',
+      },
+      attachmentAnalyses: [],
+      iocs: [],
+      forwardingResult: {
+        status: 'FORWARDED',
+        downstreamHost: 'mx.corp.internal',
+        downstreamPort: 25,
+        forwardedAt: nowIso(-86395 - i * 600),
+        appliedHeaders: {
+          'X-Security-Phishing': 'clean',
+          'X-Security-Risk-Score': '5',
+          'X-Security-Task-ID': id,
+          'X-Security-Analysis': 'ok',
+        },
+      },
+      riskSignals: [],
+      unavailableReason: null,
+    });
+  }
+
+  return records;
+}
+
 export function buildFreshDb(): MswDb {
   return {
     actor: null,
@@ -468,6 +778,8 @@ export function buildFreshDb(): MswDb {
     logSources: seedLogSources(),
     mailSources: seedMailSources(),
     killSwitch: seedKillSwitch(),
+    mailAnalyses: seedMailAnalyses(),
+    mailGateways: seedMailGateways(),
   };
 }
 

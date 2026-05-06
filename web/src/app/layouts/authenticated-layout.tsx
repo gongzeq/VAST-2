@@ -13,6 +13,7 @@ import {
   useCanManageToolConfig,
   useCanOperateKillSwitch,
   useCanViewAuditLog,
+  useCanViewRawEvidence,
 } from '@/shared/hooks/use-can';
 import type { PermissionPoint } from '@/shared/contracts/foundation';
 
@@ -46,6 +47,7 @@ export function AuthenticatedLayout({ children }: AuthenticatedLayoutProps) {
   const { actor, clearActor } = useCurrentActor();
   const { pushToast } = useToast();
   const canViewAuditLog = useCanViewAuditLog();
+  const canViewRawEvidence = useCanViewRawEvidence();
   const canManageLlmProvider = useCanManageLlmProvider();
   const canManageToolConfig = useCanManageToolConfig();
   const canManageLogSource = useCanManageLogSource();
@@ -63,6 +65,12 @@ export function AuthenticatedLayout({ children }: AuthenticatedLayoutProps) {
     { to: '/asset-scope', label: '资产范围', permitted: true },
     { to: '/asset-scope/discovered', label: '待确认资产', permitted: true },
     { to: '/dashboard', label: '仪表盘', permitted: true },
+    {
+      to: '/mails',
+      label: '钓鱼邮件',
+      permitted: canViewRawEvidence,
+      missingPermission: 'raw_evidence:view',
+    },
     {
       to: '/audit',
       label: '审计',

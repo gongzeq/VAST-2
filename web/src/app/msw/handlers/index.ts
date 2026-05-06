@@ -10,6 +10,7 @@ import { adminToolConfigHandlers } from './admin-tool-config-handlers';
 import { adminLogSourceHandlers } from './admin-log-source-handlers';
 import { adminMailSourceHandlers } from './admin-mail-source-handlers';
 import { adminKillSwitchHandlers } from './admin-kill-switch-handlers';
+import { mailHandlers } from './mail-handlers';
 
 export const handlers = [
   ...authHandlers,
@@ -24,6 +25,7 @@ export const handlers = [
   ...adminLogSourceHandlers,
   ...adminMailSourceHandlers,
   ...adminKillSwitchHandlers,
+  ...mailHandlers,
 ];
 
 export {
@@ -39,4 +41,5 @@ export {
   adminLogSourceHandlers,
   adminMailSourceHandlers,
   adminKillSwitchHandlers,
+  mailHandlers,
 };

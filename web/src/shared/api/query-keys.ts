@@ -9,6 +9,7 @@ import type {
   LlmProviderId,
   LogSourceId,
   MailSourceId,
+  MailTaskId,
   TaskId,
 } from '@/shared/contracts/branded-ids';
 import type { ToolName } from '@/shared/contracts/admin-config.contract';
@@ -18,6 +19,7 @@ import type {
   AuditTargetKind,
 } from '@/shared/contracts/audit-log.contract';
 import type { DashboardScope } from '@/shared/contracts/dashboard-summary.contract';
+import type { PhishingLabel } from '@/shared/contracts/mail-analysis.contract';
 
 export interface TaskListFilters {
   workflowType?: string;
@@ -56,6 +58,17 @@ export interface AuditLogFilters {
   pageSize: number;
 }
 
+export interface MailAnalysisListFilters {
+  assetGroupId?: string;
+  gatewayId?: string;
+  phishingLabel?: PhishingLabel;
+  since?: string;
+  until?: string;
+  sort: string;
+  page: number;
+  pageSize: number;
+}
+
 export const queryKeys = {
   authSession: () => ['auth-session'] as const,
   taskList: (filters: TaskListFilters) =>
@@ -84,4 +97,7 @@ export const queryKeys = {
   mailSources: () => ['mail-sources'] as const,
   mailSource: (id: MailSourceId) => ['mail-source', id] as const,
   killSwitchState: () => ['kill-switch-state'] as const,
+  mailAnalyses: (filters: MailAnalysisListFilters) =>
+    ['mail-analyses', filters] as const,
+  mailAnalysis: (mailTaskId: MailTaskId) => ['mail-analysis', mailTaskId] as const,
 };
