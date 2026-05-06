@@ -36,18 +36,16 @@ function renderSafeDetails(record: Record<string, unknown>): React.ReactNode {
   return (
     <dl className="grid grid-cols-[max-content,1fr] gap-x-3 gap-y-1">
       {entries.map(([key, value]) => (
-        <>
-          <dt key={`${key}-k`} className="font-mono text-gray-500">
-            {key}
-          </dt>
-          <dd key={`${key}-v`} className="font-mono text-gray-800">
+        <div key={key} className="contents">
+          <dt className="font-mono text-gray-500">{key}</dt>
+          <dd className="font-mono text-gray-800">
             {Array.isArray(value)
               ? value.map(String).join(', ')
               : value === null
               ? 'null'
               : String(value)}
           </dd>
-        </>
+        </div>
       ))}
     </dl>
   );
